@@ -69,21 +69,15 @@ struct {
 int error;
 
 int main() {
-	/*for (int i = 0; i < ARRAY_SIZE(tests); ++i) {
+	for (int i = 0; i < ARRAY_SIZE(tests); ++i) {
 		string_find_substitute(tests[i].origin, tests[i].string1, tests[i].string2);
 		if (strcmp(tests[i].origin, tests[i].result) == 0)
-			;	//printf("[%d] - OK\n", i);
+			printf("[%d] - OK\n", i);
 		else {
 			printf("[%d] - Error, expected: %s, returned: %s\n",
 					i, tests[i].origin, tests[i].result);
 			error = 1;
 		}
 	}
-	return error;*/
-	char str[100] = "aaa b bb cccc\0xxxxxxxxxxxxxxxxx";
-	char str1[10] = "aaa b";
-	char str2[10] = "12345";
-	printf("Before: %s\n", str);
-	string_find_substitute(str, str1, str2);
-	printf("After: %s\n", str);
+	return error;
 }
