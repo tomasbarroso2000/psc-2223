@@ -17,7 +17,9 @@ int to_decimal(int value) {
     return decimal;
 }
 
-void string_reverse(char buffer[], size_t buffer_size) {
+void string_reverse(char buffer[], size_t buffer_size);
+
+/*void string_reverse(char buffer[], size_t buffer_size) {
 	//int len = strlen(buffer);
 	int size = buffer_size;
     for (size_t i = 0; i < size/2; i++) {
@@ -25,7 +27,7 @@ void string_reverse(char buffer[], size_t buffer_size) {
         buffer[i] = buffer[size - i - 1];
         buffer[size - i - 1] = temp;
     }
-}
+}*/
 
 size_t get_number_size(int number) {
 	int value = number, total = 0;
@@ -36,11 +38,13 @@ size_t get_number_size(int number) {
 	return total;
 }
 
-size_t get_size(char buffer[]) {
+size_t get_size(char buffer[]);
+
+/*size_t get_size(char buffer[]) {
 	int result = 0, i;
 	for(i = 0; buffer[i] != '\0'; i++) result++;
 	return result;
-}
+}*/
 
 int convert(int n) {
   int dec = 0, i = 0, rem;
