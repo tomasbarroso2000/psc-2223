@@ -17,27 +17,28 @@ int mini_sprintf(char *str, const char *format, ...) {
 	int ival; 
 	double dval; 
 	va_start(ap, format); /* make ap point to 1st unnamed arg */
+	int normal_len = 0;
 	for (; *format; format++) { 
-		if (*format != '%') { 
-		 putchar(*format); 
-		 continue; 
-		} 
 		char temp[100] = "";
 		int result = 0;
+		if (*format != '%') { 
+			temp[0] = *format;
+			strcat(str, temp);
+			count += 1;
+		 continue; 
+		} 
 		 switch (*++format) { 
 			case 'd': 
 				 ival = va_arg(ap, int); 
 				 result = int_to_string(ival, 10, temp, sizeof ival);
 				 count += result;
 				 strcat(str, temp);
-				 printf("Result d: %d\n", result);
 				break; 
 			case 'f': 
 				 dval = va_arg(ap, double); 
 				 result = float_to_string(dval, temp, 9);
 				 count += result;
 				 strcat(str, temp);
-				 printf("Result f: %d\n", result);
 				 break; 
 			case 'c': 
 				 cval = va_arg(ap, int); 
@@ -52,7 +53,6 @@ int mini_sprintf(char *str, const char *format, ...) {
 				}
 				count += size;
 				strcat(str, temp);
-				printf("Result s: %d\n", size);
 				break; 
 			}
 			case 'x':
@@ -60,24 +60,21 @@ int mini_sprintf(char *str, const char *format, ...) {
 				result = int_to_string(ival, 16, temp, sizeof ival);
 				count += result;
 				strcat(str, temp);
-				printf("Result x: %d\n", result);
 				break;
 			 default: 
 				putchar(*p); 
 				break; 
 		} 
-		strcat(str, " ");
-		count++;
-	} 
+	}
 	 va_end(ap); /* clean up when done */ 
-	 return count - 1; //contabilizar o espaço dado a mais quando se escreve no buffer quando é o ultimo valor
+	 return count; //contabilizar o espaço dado a mais quando se escreve no buffer quando é o ultimo valor
 }
 
-int main() {
+/*int main() {
 	printf("Hello World\n");
 	char temp[100] = "";
 	char format[100] = "%x %d %c %s %f";
 	int res = mini_sprintf(temp, format, 10, 2, 'H', "Hello C", 4.4);
 	printf("End: %s\n", temp);
 	printf("Size total: %d", res);
-}
+}*/
