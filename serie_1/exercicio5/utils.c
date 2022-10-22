@@ -2,10 +2,17 @@
 
 size_t n_words = 0;
 
+/**
+ * Function that returns the total words in the words array
+ **/ 
 size_t get_n_words() {
 	return n_words;
 }
 
+/**
+ * Function that converts all tha characters of any string to
+ * lower case 
+ */ 
 char* str_lower(char str[]) {
 	strcpy(temp, str);
 	for(int j = 0; j < strlen(temp); j++) {
@@ -15,6 +22,9 @@ char* str_lower(char str[]) {
 	return temp;
 }
 
+/**
+ * Function that reads a word from a specific file
+ **/
 char *readword(FILE *file) {
 	static char word_buffer[WORD_SIZE_MAX];
 
@@ -34,13 +44,21 @@ char *readword(FILE *file) {
 	return i != 0 ? word_buffer : NULL;
 }
 
+/**
+ * Function that adds a word to Array of Word 
+ */ 
 void insert_word(char *word) {
 	strcpy(words[n_words].word, word);
 	n_words++;
 }
 
+/**
+ * Function responsible for obtaining all of the words present in
+ * the Array of Word and considers the user option wether the
+ * word obtained should be case sensitive or not
+ */ 
 char* get_words(bool is_upper) {
-	strcpy(str_temp, " ");
+	strcpy(str_temp, "");
 	for (size_t i = 0; i < n_words; i++) {
 		if(is_upper == true)
 			strcat(str_temp, words[i].word);
@@ -51,6 +69,10 @@ char* get_words(bool is_upper) {
 	return str_temp;
 }
 
+/**
+ * Function responsible for printing all of the words present in the Array of Word
+ * in case the user chooses the option of printing the final result in the standart output
+ **/
 void print_words() {
 	for (size_t i = 0; i < n_words; i++) {
 		printf("%s", words[i].word);

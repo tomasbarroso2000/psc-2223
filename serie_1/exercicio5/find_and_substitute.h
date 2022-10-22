@@ -8,8 +8,13 @@
 
 #define COMMANDS ":cwi:o:"
 #define WORD_SIZE_MAX 30
+#define FILE_SIZE_MAX 50
 #define WORD_MAX 1000
 
+/**
+ * Struct that represents all of the required information
+ * to run any type of command
+ **/ 
 typedef struct {
 	bool is_upper; 
 	bool is_word_complete;
@@ -19,17 +24,22 @@ typedef struct {
 	char *new_word;
 } Command;
 
+/**
+ * Struct that represents a word
+ **/
 typedef struct {
 	char word[WORD_SIZE_MAX];
 } Word;
 
+/**
+ * Array of words
+ **/
 Word words[WORD_MAX];
-//static size_t n_words = 0; //para a variavel n_words não poder ser carregada mais do que uma vez
 
 char temp[WORD_MAX];
-char str_temp[100];
+char str_temp[WORD_MAX];
 char old_word_lower[WORD_MAX];
-char all_words[100];
+char all_words[WORD_MAX];
 
 char* str_lower(char str[]);
 void string_find_substitute(char *string, char *string1, char *string2);
