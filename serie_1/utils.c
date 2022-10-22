@@ -4,7 +4,6 @@
 #include <errno.h>
 
 void string_reverse(char buffer[], size_t buffer_size) {
-	//int len = strlen(buffer);
 	int size = buffer_size;
     for (size_t i = 0; i < size/2; i++) {
         char temp = buffer[i];
