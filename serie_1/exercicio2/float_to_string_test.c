@@ -7,13 +7,14 @@
  * 
  *	Utilização:
  *
- *	$ gcc float_to_string_test.c float_to_string.c -o float_to_string_test -g -Wall
+ *	$ gcc ../utils.c float_to_string.c float_to_string_test.c -o float_to_string_test -lm -g -Wall
  * 
  *	$ ./float_to_string_test
  */
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #define ARRAY_SIZE(a)	(sizeof(a) / sizeof(a[0]))
 

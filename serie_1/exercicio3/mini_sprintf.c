@@ -10,13 +10,13 @@ size_t int_to_string(int value, int base, char buffer[], size_t buffer_size);
 size_t float_to_string(float value, char buffer[], size_t buffer_size);
 
 int mini_sprintf(char *str, const char *format, ...) {
-	va_list ap; /* points to each unnamed arg in turn */ 
+	va_list ap;
 	int count = 0;
 	char cval;
 	char *p, *sval; 
 	int ival; 
 	double dval; 
-	va_start(ap, format); /* make ap point to 1st unnamed arg */
+	va_start(ap, format);
 	int normal_len = 0;
 	for (; *format; format++) { 
 		char temp[100] = "";
@@ -66,15 +66,6 @@ int mini_sprintf(char *str, const char *format, ...) {
 				break; 
 		} 
 	}
-	 va_end(ap); /* clean up when done */ 
-	 return count; //contabilizar o espaço dado a mais quando se escreve no buffer quando é o ultimo valor
+	 va_end(ap); 
+	 return count; 
 }
-
-/*int main() {
-	printf("Hello World\n");
-	char temp[100] = "";
-	char format[100] = "%x %d %c %s %f";
-	int res = mini_sprintf(temp, format, 10, 2, 'H', "Hello C", 4.4);
-	printf("End: %s\n", temp);
-	printf("Size total: %d", res);
-}*/
