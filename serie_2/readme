@@ -1,0 +1,64 @@
+Descompactar numa diretoria relativa à resolução da primeira série de exercícios.
+Por exemplo:
+
+home
+	aluno
+		psc
+			2223inv
+				serie1
+				serie2
+				serie3
+
+$ cd ~/psc/2223inv/serie2
+$ unzip ~/Downloads/serie2_resolucao.zip
+$ tree serie2_resolucao
+serie2_resolucao
+├── exercicio1
+│   ├── build.sh
+│   ├── rotate_right_asm.s     <-- a realizar pelo aluno
+│   ├── rotate_right.c
+│   └── rotate_right_test.c
+├── exercicio2
+│   ├── build.sh
+│   ├── my_strlen_asm.s     <-- a realizar pelo aluno
+│   ├── my_strlen.c
+│   └── my_strlen_test.c
+├── exercicio3
+│   ├── build.sh
+│   ├── compare_data_value_asm.s     <-- a realizar pelo aluno
+│   ├── compare_data_value.c
+│   ├── compare_data_value_test.c
+│   └── dataset.h
+├── exercicio4
+│   ├── build.sh
+│   ├── find_asm.s     <-- a realizar pelo aluno
+│   ├── find.c
+│   ├── find_test.c
+│   └── multiple.s
+├── invoke
+│   └── invoke.s
+├── readme
+└── test.sh
+
+
+Os nomes dos ficheiros devem ser iguais ao nome da função que contêm.
+Os nomes dos ficheiros com o programa em assembly têm a forma xxx_asm.s,
+em que xxx corresponde ao nome da função que contêm.
+Os nomes dos ficheiros com o programa de teste têm a forma xxx_test.c,
+em que xxx corresponde ao nome da função em teste.
+
+Nos exercicios 1, 3 e 4, para testar a versão assembly deve alterar o script build.sh,
+substituindo a mensão ao ficheiro xxx.c por xxx_asm.s.
+No exercício 2 apenas necessita modificar a implementação fornecida em my_strlen_asm.s
+para cumprir os requisitos do enunciado.
+
+Após a descompactação, os ficheiros script (extensão .sh) não possuem atributo de executável.
+Para o atribuir deve fazer-se:
+
+$ chmod +x build.sh
+
+A entrega deve ser realizada no Moodle através da submissão de um pacote zip
+gerado da seguinte forma:
+
+$ cd ~/psc/2223inv/serie2
+$ zip -r serie2_resolucao.zip serie2_resolucao

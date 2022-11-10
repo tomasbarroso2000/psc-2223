@@ -8,14 +8,9 @@
 
 	.text
 	.global rotate_right
-	
 rotate_right:
+	push %r15
 	mov %rsi, %rax
-	mov $128, %rbx
-	mov $0, %rdx
-	div %rbx
-	cmp $0, %rdx 	
-	je rotate_end
 	mov $64, %rbx
 	mov $0, %rdx
 	div %rbx
@@ -49,6 +44,12 @@ for_end:
 	mov %r10, %r11
 	shrd %cl, %r9, %r10
 	shrd %cl, %r11, %r9
+	mov %r10, (%rdi, %r8, 8)
+	dec %r8
+	mov %r9, (%rdi, %r8, 8)
 	
 rotate_end:
+	pop %r15
 	ret
+
+	.section .note.GNU-stack
