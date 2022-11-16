@@ -23,7 +23,7 @@ Data onze = { "onze", 11 };
 Data doze = { "doze", 12 };
 Data treze = { "treze", 13 };
 
-#ifdef A
+//#ifdef A
 
 Data *pares[] =   { &zero, &dois, &quatro, &seis,  &oito, &dez,  &doze };
 Data *impares[] = { &um,   &tres, &cinco,  &sete,  &nove, &onze, &treze };
@@ -37,7 +37,7 @@ Dataset sets[] = {
 	{&dummy, ARRAY_SIZE(primos), primos },
 };
 
-#else
+/*#else
 
 int dummy;
 
@@ -47,7 +47,7 @@ Dataset sets[] = {
 	{&dummy, 7, { &um,   &dois, &tres,   &cinco, &sete, &onze, &treze } },
 };
 
-#endif
+#endif*/
 
 
 struct {

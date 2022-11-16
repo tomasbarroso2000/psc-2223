@@ -9,7 +9,7 @@
 	.text
 	.global rotate_right
 rotate_right:
-	push %r15
+	push %rbx
 	mov %rsi, %rax
 	mov $64, %rbx
 	mov $0, %rdx
@@ -49,7 +49,7 @@ for_end:
 	mov %r9, (%rdi, %r8, 8)
 	
 rotate_end:
-	pop %r15
+	pop %rbx
 	ret
 
 	.section .note.GNU-stack
