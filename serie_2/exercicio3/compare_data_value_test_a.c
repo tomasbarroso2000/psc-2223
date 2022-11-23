@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "dataset.h"
+#include "dataset_a.h"
 
 const char *register_name[] = { "", "rbp", "rbx", "r15", "r14", "r13", "r12" };
 
@@ -23,8 +23,6 @@ Data onze = { "onze", 11 };
 Data doze = { "doze", 12 };
 Data treze = { "treze", 13 };
 
-#ifdef A
-
 Data *pares[] =   { &zero, &dois, &quatro, &seis,  &oito, &dez,  &doze };
 Data *impares[] = { &um,   &tres, &cinco,  &sete,  &nove, &onze, &treze };
 Data *primos[] =  { &um,   &dois, &tres,   &cinco, &sete, &onze, &treze };
@@ -36,19 +34,6 @@ Dataset sets[] = {
 	{&dummy, ARRAY_SIZE(impares), impares },
 	{&dummy, ARRAY_SIZE(primos), primos },
 };
-
-#else
-
-int dummy;
-
-Dataset sets[] = {
-	{&dummy, 7, { &zero, &dois, &quatro, &seis,  &oito, &dez,  &doze  } },
-	{&dummy, 7, { &um,   &tres, &cinco,  &sete,  &nove, &onze, &treze } },
-	{&dummy, 7, { &um,   &dois, &tres,   &cinco, &sete, &onze, &treze } },
-};
-
-#endif
-
 
 struct {
 	Dataset *set1, *set2;

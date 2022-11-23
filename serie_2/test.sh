@@ -1,4 +1,3 @@
-
 echo ".............Teste do exercício 1"
 cd exercicio1
 ./build.sh
@@ -12,7 +11,8 @@ cd ../exercicio2
 echo ".............Teste do exercício 3"
 cd ../exercicio3
 ./build.sh
-./compare_data_value_test
+./compare_data_value_test_a
+./compare_data_value_test_b
 
 echo ".............Teste do exercício 4"
 cd ../exercicio4
