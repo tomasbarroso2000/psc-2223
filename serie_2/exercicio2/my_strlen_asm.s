@@ -12,27 +12,36 @@ size_t my_strlen(const char *str) {
 	.text
 	.global my_strlen
 my_strlen:
-	mov	$0, %rax
-	mov $0, %r9
+	push %r12
+	push %r13
+	push %r14
+	push %rcx
+	 
+	mov	$0, %rax					#rax = 0
+	mov $0, %r12					#r12 = 0
 for:
-	mov $255, %r8
-	mov	(%rdi, %rax, 8), %rcx
+	mov $255, %r13					#r13 = 255
+	mov	(%rdi, %r12, 8), %rcx		#rcx = str[r12]
 	
 inner_for:
-	cmp $0, %r8
-	je inner_for_end
-	mov %rcx, %r10
-	and %r8, %r10
-	cmp $0, %r10
-	je for_end
-	shl $8, %r8
-	inc %r9
+	cmp $0, %r13					
+	je inner_for_end				#r13 == 0
+	mov %rcx, %r14					#r14 = rcx
+	and %r13, %r14					#r14 = r14 & r13 => r14 & 0x00FF
+	cmp $0, %r14					
+	je for_end						#r14 == 0
+	shl $8, %r13					#r13 << 256
+	inc %rax						
 	jmp inner_for
 inner_for_end:
-	add	$1, %rax
+	inc	%r12					    #r12++
 	jmp	for
 for_end:
-	mov %r9, %rax 
+	
+	pop %rcx
+	pop %r14
+	pop %r13
+	pop %r12
 	ret
 
 	.section .note.GNU-stack

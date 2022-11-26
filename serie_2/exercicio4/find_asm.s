@@ -89,10 +89,6 @@ for_end:
 	pop %rbp
 	pop %rbx
 	
-	
-	
-	
-	
 	ret
 
 	.section .note.GNU-stack
