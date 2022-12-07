@@ -2,6 +2,17 @@
 #include <stdio.h>
 #include "list.h"
 
+Node *new_list() {
+	Node *list = malloc(sizeof *list);
+	if (list == NULL) {
+		fprintf(stderr, "Out of memory");
+		exit(1);
+	}
+	list->next = list->prev = list;
+	list->data = NULL;
+	return list;
+}
+
 void list_insert_prev(Node *list, void *data) {
 	Node *node = malloc(sizeof *node);
 	if (node == NULL) {
@@ -9,7 +20,6 @@ void list_insert_prev(Node *list, void *data) {
 		exit(1);
 	}
 	node->data = data;
-
 	node->next = list;
 	node->prev = list->prev;
 		

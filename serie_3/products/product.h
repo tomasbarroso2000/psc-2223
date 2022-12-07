@@ -9,6 +9,7 @@ typedef struct {
 
 typedef struct {
 	Node *products;
+	int total;
 } Products;
 
 void products_init();
