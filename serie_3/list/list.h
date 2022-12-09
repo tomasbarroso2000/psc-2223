@@ -4,9 +4,9 @@ typedef struct node {
 	void *data;
 } Node;
 
-Node *new_list();
+Node *list_create();
 
-void list_insert_prev(Node *list, void *data);
+void list_insert_front(Node *list, void *data);
 
 void list_remove(Node *node);
 

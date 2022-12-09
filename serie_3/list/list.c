@@ -2,29 +2,28 @@
 #include <stdio.h>
 #include "list.h"
 
-Node *new_list() {
-	Node *list = malloc(sizeof *list);
-	if (list == NULL) {
-		fprintf(stderr, "Out of memory");
-		exit(1);
+Node *list_create() {
+	Node *sentinel = malloc(sizeof *sentinel);
+	if (NULL == sentinel) {
+		fprintf(stderr, "Out of memory\n");
+		exit(-1);
 	}
-	list->next = list->prev = list;
-	list->data = NULL;
-	return list;
+	sentinel->next = sentinel->prev = sentinel;
+	return sentinel;
 }
 
-void list_insert_prev(Node *list, void *data) {
-	Node *node = malloc(sizeof *node);
-	if (node == NULL) {
+void list_insert_front(Node *list, void *data) {
+	Node *new = malloc(sizeof *new);
+	if (new == NULL) {
 		fprintf(stderr, "Out of memory");
-		exit(1);
+		exit(-1);
 	}
-	node->data = data;
-	node->next = list;
-	node->prev = list->prev;
-		
-	list->prev->next = node;
-	list->prev = node;
+	
+	new->prev = list->prev;
+	list->prev->next = new;
+	list->prev = new;
+	new->next = list;
+	new->data = data;
 }
 
 void list_remove(Node *node) {
@@ -44,6 +43,7 @@ void list_destroy(Node *list, void (*destroy_data)(void *)) {
 		destroy_data(p->data);
 		free(p);
 	}
+	free(list);
 }
 
 Node *list_find(Node *list, int (*cmp)(void *, void *), void *context) {

@@ -2,12 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "product.h"
+#include "../get_json/get_json.h"
 
 static Products products_list;
 
 void products_list_init() {
-	Node *node = new_list();
-	products_list.products = node;
+	Node *new = list_create();
+	products_list.products = new;
 	products_list.total = 0;
 }
 
@@ -46,7 +47,7 @@ static void product_insert(int id, float price, const char *description, const c
 	memmove((void *)product->description, description, strlen(description) + 1);
 	product->category = malloc(strlen(category) + 1);
 	memmove((void *)product->category, category, strlen(category) + 1);
-	list_insert_prev(products_list.products, product);
+	list_insert_front(products_list.products, product);
 	products_list.total+=1;
 }
 
@@ -58,10 +59,10 @@ static void product_delete(void *product) {
 }
 
 static void product_remove(int id) {
-	Node *n = list_find(products_list.products, cmp_id, &id);
-	if(n != NULL) {
-		list_remove(n);
-		product_delete(n->data);
+	Node *product = list_find(products_list.products, cmp_id, &id);
+	if(product != NULL) {
+		list_remove(product);
+		product_delete(product->data);
 		products_list.total-=1;
 	} 
 	else 
@@ -70,17 +71,51 @@ static void product_remove(int id) {
 
 static void products_delete(Products products_list) {
 	list_destroy(products_list.products, product_delete);
-	free(products_list.products);
+}
+
+Products *products_get() {
+	json_t *json_array = json_object_get(http_get_json_data("https://dummyjson.com/products"), "products");
+	
+	for(int j = 0; j < json_array_size(json_array); j++) {
+		json_t *obj = json_array_get(json_array, j);
+		json_t *id_value = json_object_get(obj, "id");
+		json_t *desc_value = json_object_get(obj, "description");
+		json_t *price_value = json_object_get(obj, "price");
+		json_t *category_value = json_object_get(obj, "category");
+		//maybe check if property exists else error creating product
+		int id = json_integer_value(id_value);
+		//printf("id: %d\n", id);
+		
+		char desc[150];
+		memmove(desc, json_string_value(desc_value), sizeof desc + 1);
+		//printf("Desc: %s\n", desc);
+		
+		float price = json_integer_value(price_value);
+		//printf("price: %f\n", price);
+		
+		
+		char cat[150];
+		memmove(cat, json_string_value(category_value), sizeof cat + 1);
+		//printf("cat: %s\n", cat);
+		//printf("\n ######\t#####\t#####\t##### \n");
+		
+		product_insert(id, price, desc, cat);
+		
+	}
+	
+	return &products_list;
 }
 
 int main() {
 	products_list_init();
-	product_insert(1, 2.0, "samsung galaxy", "smartphone");
+	/*product_insert(1, 2.0, "samsung galaxy", "smartphone");
 	product_insert(2, 1200.0, "PC Gamer AZUS", "Ultimate gaming PZ");
 	print_products(products_list);
-	//product_remove(1);
+	product_remove(1);
 	//product_remove(2);
 	printf("\n########### Remove ############\n");
 	print_products(products_list);
-	products_delete(products_list);
+	//products_delete(products_list);
+	products_get();*/
+	print_products(*products_get());
 }

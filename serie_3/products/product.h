@@ -18,5 +18,5 @@ int cmp_id(void *product, void *id);
 
 static void product_insert(int id, float price, const char *description, const char *category);
 
-Products products_get();
+Products *products_get();
 

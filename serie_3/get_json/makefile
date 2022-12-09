@@ -1,12 +1,14 @@
-	
+		
+all: libjson.a
+
 test: get_json_test.o get_json.o
 	gcc -g get_json_test.o get_json.o -o test -lcurl -ljansson
-	  
-get_json_test.o: get_json_test.c
-	gcc -g -c get_json_test.c
-	
-get_json.o:	get_json.c
-	gcc -g -c get_json.c
-	
+
+libjson.a: get_json.o
+	ar -rcs libjson.a get_json.o
+
+get_json.o: get_json.c get_json.h
+	gcc -c get_json.c -o get_json.o -Wall
+
 clean:
-	rm *.o 
+	rm -rf *.o *.is
