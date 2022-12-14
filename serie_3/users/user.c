@@ -33,7 +33,7 @@ int cmp_id(void *item, void *id) {
 }
 
 
-static void user_insert(Users *users_list, int id, const char *name) {
+void user_insert(Users *users_list, int id, const char *name) {
 	
 	if(list_find(users_list->users, cmp_id, &id) != NULL) {
 		fprintf(stderr, "User with id [%d] already exists\n", id);
@@ -48,14 +48,14 @@ static void user_insert(Users *users_list, int id, const char *name) {
 }
 
 
-static void user_delete(void *user) {
+void user_delete(void *user) {
 	User *u = (User*)user;
 	free((void *)(u->name));
 	free(user);
 }
 
 
-static void user_remove(Users *users_list, int id) {
+void user_remove(Users *users_list, int id) {
 	Node *user = list_find(users_list->users, cmp_id, &id);
 	if(user != NULL) {
 		list_remove(user);
@@ -66,7 +66,7 @@ static void user_remove(Users *users_list, int id) {
 		fprintf(stderr, "User with id [%d] does not exist\n", id);
 }
 
-static void users_list_delete(Users *users_list) {
+void users_list_delete(Users *users_list) {
 	list_destroy(users_list->users, user_delete);
 	free(users_list);
 }
@@ -91,7 +91,6 @@ Users *users_get() {
 		size_t size_fname = strlen(json_string_value(fname_value)) + 1;
 		size_t size_mname = strlen(json_string_value(mname_value)) + 1;
 		size_t size_lname = strlen(json_string_value(lname_value)) + 1;
-		size_t name_len = size_fname + size_mname + size_lname;
 		char *name = malloc(sizeof(*name));
 		
 		char *first_name = malloc(sizeof(*first_name));
@@ -101,25 +100,17 @@ Users *users_get() {
 		memmove(first_name, json_string_value(fname_value), size_fname);
 		memmove(maiden_name, json_string_value(mname_value), size_mname);
 		memmove(last_name, json_string_value(lname_value), size_lname);
-		strcat(first_name, " ");
-		strcat(first_name, maiden_name);
-		strcat(first_name, " ");
-		strcat(first_name, last_name);
-		memmove(name, first_name, name_len);
-		
+		memmove(name, first_name, size_fname);
+		strcat(name, " ");
+		strcat(name, maiden_name);
+		strcat(name, " ");
+		strcat(name, last_name);
 		user_insert(users_list, id, name);
-		free(name);
-		free(last_name);
-		free(maiden_name);
 		free(first_name);
+		free(maiden_name);
+		free(last_name);
+		free(name);
 	}
 	json_decref(res); //free memory used by get_json
 	return users_list;
 }
-
-int main() {
-	Users *users_list = users_get();
-	print_users(users_list);
-	users_list_delete(users_list);
-}
-

@@ -86,9 +86,9 @@ Products *products_get() {
 		//maybe check if property exists else error creating product
 		int id = json_integer_value(id_value);
 		
-		size_t size_desc = strlen(json_string_value(desc_value)) + 1;
-		char *desc = malloc(size_desc);
-		memmove(desc, json_string_value(desc_value), size_desc);
+		size_t size_desc_len = strlen(json_string_value(desc_value)) + 1;
+		char *desc = malloc(size_desc_len);
+		memmove(desc, json_string_value(desc_value), size_desc_len);
 		
 		float price = json_integer_value(price_value);
 		
@@ -103,10 +103,3 @@ Products *products_get() {
 	json_decref(res); //free memory used by get_json
 	return products_list;
 }
-
-/*int main() {
-	Products *products_list = products_get();
-	print_products(products_list);
-	products_list_delete(products_list);
-}*/
-

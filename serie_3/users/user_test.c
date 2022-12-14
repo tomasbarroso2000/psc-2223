@@ -12,7 +12,7 @@ void write_in_file(void *d) {
 
 int main() {
 	
-	fp = fopen("users.csv","w");
+	fp = fopen("../users.csv","w");
 	
 	if (fp == NULL) {
 		fprintf(stderr, "could not create file\n");
@@ -22,5 +22,6 @@ int main() {
 	Users *users_list = users_get();
 	print_users(users_list);
 	list_foreach(users_list->users, write_in_file);
-	//products_list_delete(products_list);
+	users_list_delete(users_list);
+	fclose(fp);
 }

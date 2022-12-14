@@ -12,7 +12,7 @@ void write_in_file(void *d) {
 
 int main() {
 	
-	fp = fopen("products.csv","w");
+	fp = fopen("../products.csv","w");
 	
 	if (fp == NULL) {
 		fprintf(stderr, "could not create file\n");

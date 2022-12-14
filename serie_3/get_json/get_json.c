@@ -100,7 +100,7 @@ void print_json(json_t *root) {
 	printf("\n\n");
 }
 
-static size_t write_memory_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+size_t write_memory_callback(void *contents, size_t size, size_t nmemb, void *userp) {
   size_t realsize = size * nmemb;
   struct MemoryStruct *mem = (struct MemoryStruct *)userp;
  
@@ -125,10 +125,8 @@ json_t *load_json(const char *text) {
     root = json_loads(text, 0, &error);
 
     if (root != NULL) {
-		//json_decref(root);
         return root;
     } else {
-		free(root);
         fprintf(stderr, "json error on line %d: %s\n", error.line, error.text);
         return (json_t *)0;
     }
