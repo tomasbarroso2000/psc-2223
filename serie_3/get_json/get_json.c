@@ -124,9 +124,11 @@ json_t *load_json(const char *text) {
 
     root = json_loads(text, 0, &error);
 
-    if (root) {
+    if (root != NULL) {
+		//json_decref(root);
         return root;
     } else {
+		free(root);
         fprintf(stderr, "json error on line %d: %s\n", error.line, error.text);
         return (json_t *)0;
     }

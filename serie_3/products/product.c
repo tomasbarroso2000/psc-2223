@@ -4,12 +4,9 @@
 #include "product.h"
 #include "../get_json/get_json.h"
 
-static Products products_list;
-
-void products_list_init() {
-	Node *new = list_create();
-	products_list.products = new;
-	products_list.total = 0;
+void products_list_init(Products *products_list) {
+	products_list->products = list_create();
+	products_list->total = 0;
 }
 
 void print_product(void *product) {
@@ -21,10 +18,10 @@ void print_product(void *product) {
 	printf("category: %s\n", data->category);
 }
 
-void print_products(Products products_list) {
-	printf("Número de produtos = %d\n", products_list.total);
-	if(products_list.total > 0)
-		list_foreach(products_list.products, print_product);
+void print_products(Products *products_list) {
+	printf("Número de produtos = %d\n", products_list->total);
+	if(products_list->total > 0)
+		list_foreach(products_list->products, print_product);
 	else
 		printf("\n\t ### No products ### \t\n");
 }
@@ -34,9 +31,9 @@ int cmp_id(void *item, void *id) {
 	return ((Product *)data)->id == *((int *) id);
 }
 
-static void product_insert(int id, float price, const char *description, const char *category) {
+static void product_insert(Products *products_list, int id, float price, const char *description, const char *category) {
 	
-	if(list_find(products_list.products, cmp_id, &id) != NULL) {
+	if(list_find(products_list->products, cmp_id, &id) != NULL) {
 		fprintf(stderr, "Product with id [%d] already exists\n", id);
 	}
 
@@ -47,8 +44,8 @@ static void product_insert(int id, float price, const char *description, const c
 	memmove((void *)product->description, description, strlen(description) + 1);
 	product->category = malloc(strlen(category) + 1);
 	memmove((void *)product->category, category, strlen(category) + 1);
-	list_insert_front(products_list.products, product);
-	products_list.total+=1;
+	list_insert_front(products_list->products, product);
+	products_list->total += 1;
 }
 
 static void product_delete(void *product) {
@@ -58,23 +55,27 @@ static void product_delete(void *product) {
 	free(product);
 }
 
-static void product_remove(int id) {
-	Node *product = list_find(products_list.products, cmp_id, &id);
+static void product_remove(Products *products_list, int id) {
+	Node *product = list_find(products_list->products, cmp_id, &id);
 	if(product != NULL) {
 		list_remove(product);
 		product_delete(product->data);
-		products_list.total-=1;
+		products_list->total -= 1;
 	} 
 	else 
 		fprintf(stderr, "Product with id [%d] does not exist\n", id);
 }
 
-static void products_delete(Products products_list) {
-	list_destroy(products_list.products, product_delete);
+static void products_list_delete(Products *products_list) {
+	list_destroy(products_list->products, product_delete);
+	free(products_list);
 }
 
 Products *products_get() {
-	json_t *json_array = json_object_get(http_get_json_data("https://dummyjson.com/products"), "products");
+	Products *products_list = malloc(sizeof *products_list);
+	products_list_init(products_list);
+	json_t *res = http_get_json_data("https://dummyjson.com/products");
+	json_t *json_array = json_object_get(res, "products");
 	
 	for(int j = 0; j < json_array_size(json_array); j++) {
 		json_t *obj = json_array_get(json_array, j);
@@ -84,38 +85,28 @@ Products *products_get() {
 		json_t *category_value = json_object_get(obj, "category");
 		//maybe check if property exists else error creating product
 		int id = json_integer_value(id_value);
-		//printf("id: %d\n", id);
 		
-		char desc[150];
-		memmove(desc, json_string_value(desc_value), sizeof desc + 1);
-		//printf("Desc: %s\n", desc);
+		size_t size_desc = strlen(json_string_value(desc_value)) + 1;
+		char *desc = malloc(size_desc);
+		memmove(desc, json_string_value(desc_value), size_desc);
 		
 		float price = json_integer_value(price_value);
-		//printf("price: %f\n", price);
 		
+		size_t size_cat = strlen(json_string_value(category_value)) + 1;
+		char *cat = malloc(size_cat);
+		memmove(cat, json_string_value(category_value), size_cat);
 		
-		char cat[150];
-		memmove(cat, json_string_value(category_value), sizeof cat + 1);
-		//printf("cat: %s\n", cat);
-		//printf("\n ######\t#####\t#####\t##### \n");
-		
-		product_insert(id, price, desc, cat);
-		
+		product_insert(products_list, id, price, desc, cat);
+		free(desc);
+		free(cat);
 	}
-	
-	return &products_list;
+	json_decref(res); //free memory used by get_json
+	return products_list;
 }
 
-int main() {
-	products_list_init();
-	/*product_insert(1, 2.0, "samsung galaxy", "smartphone");
-	product_insert(2, 1200.0, "PC Gamer AZUS", "Ultimate gaming PZ");
+/*int main() {
+	Products *products_list = products_get();
 	print_products(products_list);
-	product_remove(1);
-	//product_remove(2);
-	printf("\n########### Remove ############\n");
-	print_products(products_list);
-	//products_delete(products_list);
-	products_get();*/
-	print_products(*products_get());
-}
+	products_list_delete(products_list);
+}*/
+

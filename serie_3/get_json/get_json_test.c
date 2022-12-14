@@ -6,3 +6,4 @@ int main() {
 	json_t *json = http_get_json_data("https://dummyjson.com/products/1");
 	print_json(json);
 }
+	
