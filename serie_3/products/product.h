@@ -20,13 +20,13 @@ void print_products(Products *products_list);
 
 int cmp_id(void *item, void *id);
 
-static void product_insert(Products *products_list, int id, float price, const char *description, const char *category);
+void product_insert(Products *products_list, int id, float price, const char *description, const char *category);
 
-static void product_delete(void *product);
+void product_delete(void *product);
 
-static void product_remove(Products *products_list, int id);
+void product_remove(Products *products_list, int id);
 
-static void products_list_delete(Products *products_list);
+void products_list_delete(Products *products_list);
 
 Products *products_get();
 
