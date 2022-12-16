@@ -5,7 +5,7 @@ typedef struct {
 	size_t n_products;
 	struct {
 		int id;
-		size_t quantity
+		size_t quantity;
 	} products[];
 } Cart;
 
@@ -22,12 +22,12 @@ void print_carts(Carts *carts_list);
 
 int cmp_id(void *item, void *id);
 
-void cart_insert(Carts *carts_list, int user_id, size_t n_products, struct { int id; size_t quantity; } products[]);
-
 void cart_delete(void *cart);
 
 void cart_remove(Carts *carts_list, int user_id);
 
 void carts_list_delete(Carts *carts_list);
+
+//void cart_insert(Carts *carts_list, int user_id, size_t n_products, struct { int id; size_t quantity; } products[]);
 
 Carts *carts_get();
