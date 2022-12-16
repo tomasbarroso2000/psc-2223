@@ -15,3 +15,9 @@ cd ../users
 make test
 valgrind ./test_users
 make clean
+
+echo -e "\n\n.............Teste carts\n\n"
+cd ../carts
+make test
+valgrind ./test_carts
+make clean

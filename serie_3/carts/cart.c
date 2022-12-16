@@ -39,16 +39,14 @@ int cmp_id(void *item, void *id) {
 void cart_insert(Carts *carts_list, int user_id, size_t n_products, struct { int id; size_t quantity; } products[]) {
 	
 	//verificar se a lista de produtos a ser inserida tem produtos com ids diferentes
-	Cart *cart = malloc(sizeof *cart);
+	Cart *cart = malloc((sizeof *cart + sizeof products) * 4);
 	cart->user_id = user_id;
 	cart->n_products = n_products;
 	
 	for(int i = 0; i < n_products; i++) {
-		//cart->products[i].id = products[i].id;
-		//cart->products[i].quantity = products[i].quantity;
-		printf("{id: %d, quantity: %ld}\n", products[i].id, products[i].quantity);
+		cart->products[i].id = products[i].id;
+		cart->products[i].quantity = products[i].quantity;
 	}
-	memcpy(cart->products, products, sizeof(products));
 	
 	list_insert_front(carts_list->carts, cart);
 	carts_list->total += 1;
@@ -76,6 +74,7 @@ void carts_list_delete(Carts *carts_list) {
 
 Carts *carts_get() {
 	Carts *carts_list = malloc(sizeof *carts_list);
+	printf("after arts list malloc\n");
 	carts_list_init(carts_list);
 	json_t *res = http_get_json_data("https://dummyjson.com/carts");
 	json_t *json_array = json_object_get(res, "carts");
@@ -99,22 +98,11 @@ Carts *carts_get() {
 			int id = json_integer_value(product_id_value);
 			size_t quantity = json_integer_value(quantity_value);
 			
-			//printf("[id:%d -> quantity:%ld]", id, quantity);
-			
 			products[i].id = id;
 			products[i].quantity = quantity;
 		}
-		
-		//maybe check if property exists else error creating product
 		cart_insert(carts_list, user_id, total_products, products);
 	}
 	json_decref(res); //free memory used by get_json
 	return carts_list;
-}
-
-
-int main() {
-	Carts *carts_list = carts_get();
-	print_carts(carts_list);
-	carts_list_delete(carts_list);
 }
