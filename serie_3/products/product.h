@@ -18,7 +18,7 @@ void print_product(void *product);
 
 void print_products(Products *products_list);
 
-int cmp_id(void *item, void *id);
+int cmp_id_product(void *item, void *id);
 
 void product_insert(Products *products_list, int id, float price, const char *description, const char *category);
 

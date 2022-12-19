@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include "product.h"
+#include "../products/product.h"
 
 static FILE *fp;
 
@@ -12,7 +12,7 @@ void write_in_file(void *d) {
 
 int main() {
 	
-	fp = fopen("../products.csv","w");
+	fp = fopen("csv_files/products.csv","w");
 	
 	if (fp == NULL) {
 		fprintf(stderr, "could not create file\n");
@@ -21,6 +21,7 @@ int main() {
 	
 	Products *products_list = products_get();
 	print_products(products_list);
+	fprintf(fp, "id, price, description, category\n");
 	list_foreach(products_list->products, write_in_file);
 	products_list_delete(products_list);
 	fclose(fp);

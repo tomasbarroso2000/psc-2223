@@ -1,0 +1,38 @@
+
+#dynamic lib
+dynamic_lib.so: product.o user.o cart.o list.o get_json.o
+	gcc -shared -o dynamic_lib.so product.o user.o cart.o list.o get_json.o -Wall
+
+#products
+test_products: product_test.o product.o
+	gcc -g -Wall product_test.c ../products/product.c ../get_json/get_json.c ../list/list.c -o test_products -lcurl -ljansson
+	
+product.o: ../products/product.c
+	gcc -c -Wall ../products/product.c -o product.o -fpic
+	
+#users
+test_users: user_test.o user.o
+	gcc -g -Wall user_test.c ../users/user.c ../get_json/get_json.c  ../list/list.c -o test_users -lcurl -ljansson
+
+user.o: ../users/user.c
+	gcc -c -Wall ../users/user.c -o user.o -fpic
+
+#carts
+test_carts: cart_test.o cart.o
+	gcc -g -Wall cart_test.c ../carts/cart.c ../get_json/get_json.c ../list/list.c -o test_carts -lcurl -ljansson
+	
+cart.o: ../carts/cart.c
+	gcc -c -Wall ../carts/cart.c -o cart.o -fpic
+
+#get_json
+test_get_json: get_json_test.o get_json.o
+	gcc -g -Wall get_json_test.o get_json.o -o test_get_json -lcurl -ljansson
+	
+get_json.o: ../get_json/get_json.c
+	gcc -c -Wall ../get_json/get_json.c -o get_json.o -fpic
+	
+list.o: ../list/list.c
+	gcc -c -Wall ../list/list.c -o list.o -fpic -fpic
+
+clean:
+	rm -rf *.o *.is

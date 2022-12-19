@@ -4,6 +4,8 @@
 #include "cart.h"
 #include "../get_json/get_json.h"
 
+#define	CART_SIZE(n_prod)	(sizeof(struct { int id; size_t quantity; }) * n_prod)
+
 void carts_list_init(Carts *carts_list) {
 	carts_list->carts = list_create();
 	carts_list->total = 0;
@@ -31,15 +33,16 @@ void print_carts(Carts *carts_list) {
 		printf("\n\t ### No carts ### \t\n");
 }
 
-int cmp_id(void *item, void *id) {
+int cmp_id_cart(void *item, void *id) {
 	void *data = ((Node *)item)->data;
 	return ((Cart *)data)->user_id == *((int *) id);
 }
 
-void cart_insert(Carts *carts_list, int user_id, size_t n_products, struct { int id; size_t quantity; } products[]) {
+void cart_insert(Carts *carts_list, int user_id, size_t n_products, void *prods) {
+	struct { int id; size_t quantity; } products[n_products];
+	memmove(products, prods, CART_SIZE(n_products));
 	
-	//verificar se a lista de produtos a ser inserida tem produtos com ids diferentes
-	Cart *cart = malloc((sizeof *cart + sizeof products) * 4);
+	Cart *cart = malloc(sizeof(*cart) + CART_SIZE(n_products));
 	cart->user_id = user_id;
 	cart->n_products = n_products;
 	
@@ -57,7 +60,7 @@ void cart_delete(void *cart) {
 }
 
 void cart_remove(Carts *carts_list, int user_id) {
-	Node *cart = list_find(carts_list->carts, cmp_id, &user_id);
+	Node *cart = list_find(carts_list->carts, cmp_id_cart, &user_id);
 	if(cart != NULL) {
 		list_remove(cart);
 		cart_delete(cart->data);
@@ -101,7 +104,7 @@ Carts *carts_get() {
 			products[i].id = id;
 			products[i].quantity = quantity;
 		}
-		cart_insert(carts_list, user_id, total_products, products);
+		cart_insert(carts_list, user_id, total_products, &products);
 	}
 	json_decref(res); //free memory used by get_json
 	return carts_list;

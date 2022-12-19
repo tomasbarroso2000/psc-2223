@@ -26,14 +26,14 @@ void print_products(Products *products_list) {
 		printf("\n\t ### No products ### \t\n");
 }
 
-int cmp_id(void *item, void *id) {
+int cmp_id_product(void *item, void *id) {
 	void *data = ((Node *)item)->data;
 	return ((Product *)data)->id == *((int *) id);
 }
 
 void product_insert(Products *products_list, int id, float price, const char *description, const char *category) {
 	
-	if(list_find(products_list->products, cmp_id, &id) != NULL) {
+	if(list_find(products_list->products, cmp_id_product, &id) != NULL) {
 		fprintf(stderr, "Product with id [%d] already exists\n", id);
 	}
 
@@ -56,7 +56,7 @@ void product_delete(void *product) {
 }
 
 void product_remove(Products *products_list, int id) {
-	Node *product = list_find(products_list->products, cmp_id, &id);
+	Node *product = list_find(products_list->products, cmp_id_product, &id);
 	if(product != NULL) {
 		list_remove(product);
 		product_delete(product->data);

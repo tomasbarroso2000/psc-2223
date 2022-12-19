@@ -1,0 +1,2 @@
+test_products:
+	gcc product_test.c -g -L../dynamic_lib -lcurl -ljansson -o product_test -Wall

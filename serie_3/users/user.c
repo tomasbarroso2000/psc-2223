@@ -27,7 +27,7 @@ void print_users(Users *users_list) {
 }
 
 
-int cmp_id(void *item, void *id) {
+int cmp_id_user(void *item, void *id) {
 	void *data = ((Node *)item)->data;
 	return ((User *)data)->id == *((int *) id);
 }
@@ -35,7 +35,7 @@ int cmp_id(void *item, void *id) {
 
 void user_insert(Users *users_list, int id, const char *name) {
 	
-	if(list_find(users_list->users, cmp_id, &id) != NULL) {
+	if(list_find(users_list->users, cmp_id_user, &id) != NULL) {
 		fprintf(stderr, "User with id [%d] already exists\n", id);
 	}
 
@@ -56,7 +56,7 @@ void user_delete(void *user) {
 
 
 void user_remove(Users *users_list, int id) {
-	Node *user = list_find(users_list->users, cmp_id, &id);
+	Node *user = list_find(users_list->users, cmp_id_user, &id);
 	if(user != NULL) {
 		list_remove(user);
 		user_delete(user->data);

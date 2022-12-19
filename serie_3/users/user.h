@@ -16,7 +16,7 @@ void print_user(void *user);
 
 void print_users(Users *users_list);
 
-int cmp_id(void *item, void *id);
+int cmp_id_user(void *item, void *id);
 
 void user_insert(Users *users_list, int id, const char *name);
 
