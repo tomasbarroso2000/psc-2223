@@ -1,8 +1,4 @@
 
-#dynamic lib
-dynamic_lib.so: product.o user.o cart.o list.o get_json.o
-	gcc -shared -o dynamic_lib.so product.o user.o cart.o list.o get_json.o -Wall
-
 #products
 test_products: product_test.o product.o
 	gcc -g -Wall product_test.c ../products/product.c ../get_json/get_json.c ../list/list.c -o test_products -lcurl -ljansson
