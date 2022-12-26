@@ -16,7 +16,7 @@ void products_list_init(Products *products_list);
 
 void print_product(void *product);
 
-void print_products(Products *products_list);
+extern void print_products(Products *products_list);
 
 int cmp_id_product(void *item, void *id);
 
@@ -28,5 +28,5 @@ void product_remove(Products *products_list, int id);
 
 void products_list_delete(Products *products_list);
 
-Products *products_get();
+extern Products *products_get();
 

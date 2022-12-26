@@ -41,8 +41,7 @@ void user_insert(Users *users_list, int id, const char *name) {
 
 	User *user = malloc(sizeof *user);
 	user->id = id;
-	user->name = malloc(strlen(name) + 1);
-	memmove((void *)user->name, name, strlen(name) + 1);
+	user->name = strdup(name);
 	list_insert_front(users_list->users, user);
 	users_list->total += 1;
 }

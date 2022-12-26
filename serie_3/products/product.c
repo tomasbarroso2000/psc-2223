@@ -4,6 +4,8 @@
 #include "product.h"
 #include "../get_json/get_json.h"
 
+extern Products products;
+
 void products_list_init(Products *products_list) {
 	products_list->products = list_create();
 	products_list->total = 0;
@@ -40,10 +42,8 @@ void product_insert(Products *products_list, int id, float price, const char *de
 	Product *product = malloc(sizeof *product);
 	product->id = id;
 	product->price = price;
-	product->description = malloc(strlen(description) + 1);
-	memmove((void *)product->description, description, strlen(description) + 1);
-	product->category = malloc(strlen(category) + 1);
-	memmove((void *)product->category, category, strlen(category) + 1);
+	product->description = strdup(description);
+	product->category = strdup(category);
 	list_insert_front(products_list->products, product);
 	products_list->total += 1;
 }

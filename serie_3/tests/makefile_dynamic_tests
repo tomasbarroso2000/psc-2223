@@ -17,7 +17,7 @@ test_carts:
 test_get_json:
 	gcc get_json_test.c -g -L. -ldynamic -lcurl -ljansson -o test_get_json -Wall
 
-product.o: ../products/product.c
+product.o: ../products/product.c ../products/product.h
 	gcc -c -Wall ../products/product.c -o product.o -fpic
 	
 user.o: ../users/user.c
