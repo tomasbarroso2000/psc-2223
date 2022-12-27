@@ -1,28 +1,22 @@
 echo -e "\n\n.............\n\n"
 echo -e "\n\n.............Dynamic Tests\n\n"
-make -f makefile_dynamic_tests libdynamic.so
+make
 echo -e "\n\n.............Test get_json\n\n"
-make -f makefile_dynamic_tests test_get_json
-valgrind ./test_get_json
-make -f makefile_dynamic_tests clean
+valgrind ./get_json_test
 echo -e "\n\n.............Press enter for products test\n\n"
 read skip
 
 echo -e "\n\n.............Test products\n\n"
-make -f makefile_dynamic_tests test_products
-valgrind ./test_products
-make -f makefile_dynamic_tests clean
+valgrind ./products_test
 echo -e "\n\n.............Press enter for users test\n\n"
 read skip
 
 echo -e "\n\n.............Test users\n\n"
-make -f makefile_dynamic_tests test_users
-valgrind ./test_users
-make -f makefile_dynamic_tests clean
+valgrind ./users_test
 echo -e "\n\n.............Press enter for carts test\n\n"
 read skip
 
 echo -e "\n\n.............Test carts\n\n"
-make -f makefile_dynamic_tests test_carts
-valgrind ./test_carts
-make -f makefile_dynamic_tests clean
+valgrind ./carts_test
+echo -e "\n\n.............Dynamic Tests End\n\n"
+make clean

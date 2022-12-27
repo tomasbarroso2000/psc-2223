@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include "../products/product.h"
+#include "../../products/product.h"
 
 static FILE *fp;
 
@@ -12,10 +12,10 @@ void write_in_file(void *d) {
 
 int main() {
 	
-	fp = fopen("csv_files/products.csv","w");
+	fp = fopen("../csv_files/products.csv","w");
 	
 	if (fp == NULL) {
-		fprintf(stderr, "could not create file\n");
+		fprintf(stderr, "could not create file products.csv\n");
 		exit(1);
 	}
 	
