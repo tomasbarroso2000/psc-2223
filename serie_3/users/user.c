@@ -84,31 +84,19 @@ Users *users_get() {
 		json_t *mname_value = json_object_get(obj, "maidenName");
 		json_t *lname_value = json_object_get(obj, "lastName");
 		
-		//maybe check if property exists else error creating product
 		int id = json_integer_value(id_value);
 		
-		size_t size_fname = strlen(json_string_value(fname_value)) + 1;
-		size_t size_mname = strlen(json_string_value(mname_value)) + 1;
-		size_t size_lname = strlen(json_string_value(lname_value)) + 1;
-		char *name = malloc(sizeof(*name));
+		char *first_name = strdup(json_string_value(fname_value));
+		char *middle_name = strdup(json_string_value(mname_value));
+		char *last_name = strdup(json_string_value(lname_value));
+		char name[strlen(first_name) + strlen(middle_name) + strlen(last_name) + 3];
 		
-		char *first_name = malloc(sizeof(*first_name));
-		char *maiden_name = malloc(sizeof(*maiden_name));
-		char *last_name = malloc(sizeof(*last_name));
+		sprintf(name,"%s %s %s", first_name, middle_name, last_name);
 		
-		memmove(first_name, json_string_value(fname_value), size_fname);
-		memmove(maiden_name, json_string_value(mname_value), size_mname);
-		memmove(last_name, json_string_value(lname_value), size_lname);
-		memmove(name, first_name, size_fname);
-		strcat(name, " ");
-		strcat(name, maiden_name);
-		strcat(name, " ");
-		strcat(name, last_name);
 		user_insert(users_list, id, name);
 		free(first_name);
-		free(maiden_name);
+		free(middle_name);
 		free(last_name);
-		free(name);
 	}
 	json_decref(res); //free memory used by get_json
 	return users_list;

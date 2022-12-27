@@ -4,8 +4,6 @@
 #include "product.h"
 #include "../get_json/get_json.h"
 
-extern Products products;
-
 void products_list_init(Products *products_list) {
 	products_list->products = list_create();
 	products_list->total = 0;
@@ -83,18 +81,11 @@ Products *products_get() {
 		json_t *desc_value = json_object_get(obj, "description");
 		json_t *price_value = json_object_get(obj, "price");
 		json_t *category_value = json_object_get(obj, "category");
-		//maybe check if property exists else error creating product
+		
 		int id = json_integer_value(id_value);
-		
-		size_t size_desc_len = strlen(json_string_value(desc_value)) + 1;
-		char *desc = malloc(size_desc_len);
-		memmove(desc, json_string_value(desc_value), size_desc_len);
-		
+		char *desc = strdup(json_string_value(desc_value));
 		float price = json_integer_value(price_value);
-		
-		size_t size_cat = strlen(json_string_value(category_value)) + 1;
-		char *cat = malloc(size_cat);
-		memmove(cat, json_string_value(category_value), size_cat);
+		char *cat = strdup(json_string_value(category_value));
 		
 		product_insert(products_list, id, price, desc, cat);
 		free(desc);

@@ -1,13 +1,16 @@
+CFLAGS = -c -Wall
 
-#export LD_LIBRARY_PATH=/home/aluno/Documents/PSC-2223SI/serie_3/tests/:$LD_LIBRARY_PATH
+all: libdynamic.so products_test users_test
 
-#dynamic lib
-libjson.so: product.c
-	gcc -c -fpic ../../products/product.c
-	gcc -shared -o dynamiclib.so product.o
+libdynamic.so:
+	gcc -c -fpic ../../get_json/get_json.c ../../list/list.c ../../products/product.c ../../users/user.c ../../carts/cart.c
+	gcc -shared -o libdynamic.so get_json.o list.o product.o user.o cart.o -lcurl -ljansson
 	
-product.c: 
-	gcc -c -Wall ../../products/product.c -o product.o -fpic
-
+products_test: 
+	gcc products_test.c -L. -ldynamic -ldl -lcurl -ljansson -o products_test
+	
+users_test: 
+	gcc users_test.c -L. -ldynamic -ldl -lcurl -ljansson -o users_test
+	
 clean:
 	rm -rf *.o *.is
