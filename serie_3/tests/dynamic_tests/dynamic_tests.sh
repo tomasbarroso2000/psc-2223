@@ -1,4 +1,5 @@
 echo -e "\n\n.............\n\n"
+export LD_LIBRARY_PATH=.
 echo -e "\n\n.............Dynamic Tests\n\n"
 make
 echo -e "\n\n.............Test get_json\n\n"

@@ -64,7 +64,7 @@ int main() {
 	products_lists_delete_lib(products_list);
 	
 	if (dlclose(handle) != 0) {
-		fprintf(stderr, "Could not close plugin: %s\n", dlerror());
+		fprintf(stderr, "Could not close handle: %s\n", dlerror());
 		fclose(fp);
 		return -1;
 	}

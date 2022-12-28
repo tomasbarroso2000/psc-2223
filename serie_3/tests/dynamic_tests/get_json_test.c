@@ -30,7 +30,7 @@ int main() {
 	json_decref(json); 
 	
 	if (dlclose(handle) != 0) {
-		fprintf(stderr, "Could not close plugin: %s\n", dlerror());
+		fprintf(stderr, "Could not close handle: %s\n", dlerror());
 		return -1;
 	}
 }

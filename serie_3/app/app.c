@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "command.h"
+#include "utils.h"
 
 
 int main() {
