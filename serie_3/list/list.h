@@ -1,3 +1,6 @@
+#ifndef LIST_H
+#define LIST_H
+
 typedef struct node {
 	struct node *next;
 	struct node *prev;
@@ -15,3 +18,5 @@ void list_foreach(Node *list, void (*)(void *));
 void list_destroy(Node *list, void (*destroy_data)(void *));
 
 Node *list_find(Node *list, int (*cmp)(void *, void *), void *context);
+
+#endif

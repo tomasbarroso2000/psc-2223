@@ -1,3 +1,5 @@
+#sudo cp /home/aluno/Documents/PSC-2223SI/serie_3/tests/dynamic_tests/libdynamic.so /usr/lib
+
 echo -e "\n\n.............\n\n"
 export LD_LIBRARY_PATH=.
 echo -e "\n\n.............Dynamic Tests\n\n"

@@ -10,10 +10,10 @@ get_json_test:
 	gcc get_json_test.c -L. -ldynamic -ldl -lcurl -ljansson -o get_json_test
 	
 products_test: 
-	gcc products_test.c -L. -ldynamic -ldl -lcurl -ljansson -o products_test
+	gcc products_test.c ../../utils.c -L. -ldynamic -ldl -lcurl -ljansson -o products_test
 	
 users_test: 
-	gcc users_test.c -L. -ldynamic -ldl -lcurl -ljansson -o users_test
+	gcc users_test.c ../../utils.c -L. -ldynamic -ldl -lcurl -ljansson -o users_test
 	
 carts_test: 
 	gcc carts_test.c -L. -ldynamic -ldl -lcurl -ljansson -o carts_test
