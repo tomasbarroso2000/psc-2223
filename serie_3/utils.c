@@ -1,72 +1,210 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include <dlfcn.h>
 #include <string.h>
-#include "../products/product.h"
-#include "../users/user.h"
-#include "../carts/cart.h"
+#include "utils.h"
 
-static void *handle = dlopen("../tests/libdynamic.so", RTLD_LAZY);
+static FILE *fp;
 
-void handle_error() {
+static void *handle;
+
+void handle_init() {
+	handle = dlopen("libdynamic.so", RTLD_LAZY);
+	
 	if (handle == NULL) {
 		fprintf(stderr, "%s\n", dlerror());
-		return -1;
+		exit(1);
 	}
 }
 
-void dl_error(void *ptr) {
-	if (ptr == NULL) {
+void handle_close() {
+	if (fp != NULL) {
+		fclose(fp);
+	}
+	
+	if (dlclose(handle) != 0) {
+		fprintf(stderr, "Could not close handle: %s\n", dlerror());
+		exit(1);
+	}
+}
+
+void check_dlsym(void *func) {
+	if (func == NULL) {
 		fprintf(stderr, "dlsym: %s\n", dlerror());
-		return -1;
+		exit(1);
 	}
 }
 
-void* print_any_lib(char *type) {
-	if (strcmp(type, "print_products") == 0) {
-		void (*print_products_lib)(Products *products_list) = dlsym(handle, "print_products");
-		dl_error(print_products_lib);
-		return print_products_lib;
-	}
-	
-	if (strcmp(type, "print_users") == 0) {
-		void (*print_users_lib)(Users *users_list) = dlsym(handle, "print_users");
-		dl_error(print_users_lib);
-		return print_users_lib;
-	}
-	
-	if (strcmp(type, "print_carts") == 0) {
-		void (*print_carts_lib)(Carts *carts_list) = dlsym(handle, "print_carts");
-		dl_error(print_carts_lib);
-		return print_carts_lib;
-	}
-	
+/*Get Json*/
+
+json_t* get_json_data_lib(const char *url) {
+	handle_init();
+	json_t* (*http_get_json)(const char *url) = dlsym(handle, "http_get_json_data");
+	check_dlsym(http_get_json);
+	json_t* json = http_get_json(url);
+	handle_close();
+	return json;
 }
+
+void print_json_lib(json_t *json) {
+	handle_init();
+	void (*print_json_fun)(json_t *root) = dlsym(handle, "print_json");
+	check_dlsym(print_json_fun);
+	print_json_fun(json);
+	json_decref(json); 
+	handle_close();
+}
+
+
+/*Products Section*/
 
 Products* get_products_lib() {
-	handle_error();
+	Products *products;
+	handle_init();
 	Products* (*products_get_lib)(void) = dlsym(handle, "products_get");
-	
-	dl_error(products_get_lib);
-	
-	return products_get_lib();
+	check_dlsym(products_get_lib);
+	products = products_get_lib();
+	handle_close();
+	return products;
 }
+
+void print_products_lib(Products *products) {
+	handle_init();
+	void (*print)(Products *products_list) = dlsym(handle, "print_products");
+	check_dlsym(print);
+	print(products);
+	handle_close();
+}
+
+void write_in_file_products(void *d) {
+	Product *data = (Product *)d;
+	fprintf(fp, "%d, %.2f €, %s, %s\n", data->id, data->price, data->description, data->category);
+}
+
+void products_write_in_file_lib(Products *products_list) {
+	handle_init();
+	void (*list_foreach_lib)(Node *list, void (*)(void *)) = dlsym(handle, "list_foreach");
+	check_dlsym(list_foreach_lib);
+	fp = fopen("../csv_files/products.csv","w");
+	
+	if (fp == NULL) {
+		fprintf(stderr, "could not create file products.csv\n");
+		exit(1);
+	}
+	
+	fprintf(fp, "id, price, description, category\n");
+	list_foreach_lib(products_list->products, write_in_file_products);
+	handle_close();
+}
+
+void products_delete_lib(Products *products_list) {
+	void *handle = dlopen("libdynamic.so", RTLD_LAZY);
+	handle_init();
+	void (*products_list_delete_lib)(Products *products_list) = dlsym(handle, "products_list_delete");
+	check_dlsym(products_list_delete_lib);
+	products_list_delete_lib(products_list);
+	handle_close();
+}
+
+/*Users Section*/
 
 Users* get_users_lib() {
-	handle_error();
+	Users *users;
+	handle_init();
 	Users* (*users_get_lib)(void) = dlsym(handle, "users_get");
-	
-	dl_error(users_get_lib);
-	
-	return users_get_lib();
+	check_dlsym(users_get_lib);
+	users = users_get_lib();
+	handle_close();
+	return users;
 }
 
+void print_users_lib(Users *users) {
+	handle_init();
+	void (*print)(Users *users_list) = dlsym(handle, "print_users");
+	check_dlsym(print);
+	print(users);
+	handle_close();
+}
+
+void write_in_file_users(void *d) {
+	User *data = (User *)d;
+	fprintf(fp, "%d, %s\n", data->id, data->name);
+}
+
+void users_write_in_file_lib(Users *users_list) {
+	handle_init();
+	void (*list_foreach_lib)(Node *list, void (*)(void *)) = dlsym(handle, "list_foreach");
+	check_dlsym(list_foreach_lib);
+	fp = fopen("../csv_files/users.csv","w");
+	
+	if (fp == NULL) {
+		fprintf(stderr, "could not create file users.csv\n");
+		exit(1);
+	}
+	
+	fprintf(fp, "id, name\n");
+	list_foreach_lib(users_list->users, write_in_file_users);
+	handle_close();
+}
+
+void users_delete_lib(Users *users_list) {
+	
+	handle_init();
+	void (*users_list_delete_lib)(Users *users_list) = dlsym(handle, "users_list_delete");
+	check_dlsym(users_list_delete_lib);
+	users_list_delete_lib(users_list);
+	handle_close();
+}
+
+/*Carts Section*/
+
 Carts* get_carts_lib() {
-	handle_error();
+	Carts *carts;
+	handle_init();
 	Carts* (*carts_get_lib)(void) = dlsym(handle, "carts_get");
+	check_dlsym(carts_get_lib);
+	carts = carts_get_lib();
+	handle_close();
+	return carts;
+}
+
+void print_carts_lib(Carts *carts) {
+	handle_init();
+	void (*print)(Carts *carts_list) = dlsym(handle, "print_carts");
+	check_dlsym(print);
+	print(carts);
+	handle_close();
+}
+
+void write_in_file_carts(void *d) {
+	Cart *data = (Cart *)d;
+	fprintf(fp, "%d, %ld\n", data->user_id, data->n_products);
+	for(int i = 0; i < data->n_products; i++) {
+		fprintf(fp, "\t id, quantity\n");
+		fprintf(fp, "\t%d, %ld\n", data->products[i].id, data->products[i].quantity);
+	}
+}
+
+void carts_write_in_file_lib(Carts *carts_list) {
+	handle_init();
+	void (*list_foreach_lib)(Node *list, void (*)(void *)) = dlsym(handle, "list_foreach");
+	check_dlsym(list_foreach_lib);
+	fp = fopen("../csv_files/carts.csv","w");
 	
-	dl_error(carts_get_lib);
+	if (fp == NULL) {
+		fprintf(stderr, "could not create file carts.csv\n");
+		exit(1);
+	}
 	
-	return carts_get_lib();
+	fprintf(fp, "user id, number of products\n");
+	list_foreach_lib(carts_list->carts, write_in_file_carts);
+	handle_close();
+}
+
+void carts_delete_lib(Carts *carts_list) {
+	handle_init();
+	void (*carts_list_delete_lib)(Carts *carts_list) = dlsym(handle, "carts_list_delete");
+	check_dlsym(carts_list_delete_lib);
+	carts_list_delete_lib(carts_list);
+	handle_close();
 }
