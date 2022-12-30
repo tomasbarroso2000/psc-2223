@@ -1,5 +1,9 @@
 #include "../list/list.h"
 
+#ifndef USER_H
+#define USER_H
+
+
 typedef struct {
 	int id;
 	const char *name;
@@ -28,3 +32,4 @@ void users_list_delete(Users *users_list);
 
 Users *users_get();
 
+#endif
