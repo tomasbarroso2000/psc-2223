@@ -27,4 +27,9 @@ void print_carts_lib(Carts *carts);
 void carts_write_in_file_lib(Carts *carts_list);
 void carts_delete_lib(Carts *carts_list);
 
+void any_list_foreach_lib(Node *list, void (*do_it)(void *));
+Node *list_find_lib(Node *list, int (*cmp)(void *, void *), void *context);
+int cmp_id_user_lib(void *item, void *id);
+int cmp_id_product_lib(void *item, void *id);
+
 #endif

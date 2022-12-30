@@ -208,3 +208,37 @@ void carts_delete_lib(Carts *carts_list) {
 	carts_list_delete_lib(carts_list);
 	handle_close();
 }
+
+void any_list_foreach_lib(Node *list, void (*do_it)(void *)) {
+	handle_init();
+	void (*li_foreach)(Node *list, void (*)(void *)) = dlsym(handle, "list_foreach");
+	check_dlsym(li_foreach);
+	li_foreach(list, do_it);
+	handle_close();
+}
+
+Node *list_find_lib(Node *list, int (*cmp)(void *, void *), void *context) {
+	handle_init();
+	void (*li_find)(Node *list, void (*)(void *)) = dlsym(handle, "list_foreach");
+	check_dlsym(list_foreach_lib);
+	li_find(list, cmp, context);
+	handle_close();
+}
+
+int cmp_id_user_lib(void *item, void *id) {
+	handle_init();
+	int cp_id_user(void *item, void *id) = dlsym(handle, "cmp_id_user");
+	check_dlsym(cp_id_user);
+	int result = cp_id_user(item, id);
+	handle_close();
+	return result;
+}
+
+int cmp_id_product_lib(void *item, void *id) {
+	handle_init();
+	int cp_id_product(void *item, void *id) = dlsym(handle, "cmp_id_product");
+	check_dlsym(cp_id_product);
+	int result = cp_id_product(item, id);
+	handle_close();
+	return cp_id_product;
+}
