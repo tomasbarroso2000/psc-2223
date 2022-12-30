@@ -227,7 +227,7 @@ Node *list_find_lib(Node *list, int (*cmp)(void *, void *), void *context) {
 
 int cmp_id_user_lib(void *item, void *id) {
 	handle_init();
-	int cp_id_user(void *item, void *id) = dlsym(handle, "cmp_id_user");
+	int (*cp_id_user)(void *item, void *id) = dlsym(handle, "cmp_id_user");
 	check_dlsym(cp_id_user);
 	int result = cp_id_user(item, id);
 	handle_close();
@@ -236,9 +236,25 @@ int cmp_id_user_lib(void *item, void *id) {
 
 int cmp_id_product_lib(void *item, void *id) {
 	handle_init();
-	int cp_id_product(void *item, void *id) = dlsym(handle, "cmp_id_product");
+	int (*cp_id_product)(void *item, void *id) = dlsym(handle, "cmp_id_product");
 	check_dlsym(cp_id_product);
 	int result = cp_id_product(item, id);
 	handle_close();
 	return cp_id_product;
+}
+
+void print_user_lib(void *user){
+	handle_init();
+	void (*print_u) (void *user) = dlsym(handle, "print_user");
+	check_dlsym(print_u);
+	print_u(user);
+	handle_close();
+}
+
+void print_product(void *product){
+	handle_init();
+	void (*print_p) (void *product) = dlsym(handle, "print_product");
+	check_dlsym(print_p);
+	print_p(product);
+	handle_close();
 }

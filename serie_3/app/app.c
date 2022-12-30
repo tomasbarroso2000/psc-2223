@@ -13,7 +13,7 @@ void create_value(void *d) {
 	struct { Product *product; size_t quantity; } products[data->n_products];
 	for (int i = 0; i < cart->n_products; i++) {
 		Node *product = list_find_lib(products_list->products, cmp_id_product_lib, &(data->products[i].id));
-		memcpy(products[i].product, product, sizeof(struct { Product *product; size_t quantity; }));
+		memcpy(products[i].product, product->data, sizeof(product->data));
 		products[i].quantity = data->products[i].quantity;
 	}
 	User *user = (User *)(user_node->data);
