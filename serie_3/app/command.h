@@ -1,3 +1,6 @@
+#ifndef COMMAND_H
+#define COMMAND_H
+
 #include "../list/list.h"
 
 typedef struct {
@@ -30,3 +33,5 @@ void commands_list_delete();
 void command_execute(char letter, char *param);
 
 void command_new(char *lib);
+
+#endif

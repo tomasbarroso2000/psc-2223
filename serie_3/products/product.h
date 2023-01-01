@@ -1,3 +1,6 @@
+#ifndef PRODUCT_H
+#define PRODUCT_H
+
 #include "../list/list.h"
 
 typedef struct {
@@ -30,3 +33,4 @@ void products_list_delete(Products *products_list);
 
 Products *products_get();
 
+#endif

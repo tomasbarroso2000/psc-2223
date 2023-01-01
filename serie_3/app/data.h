@@ -1,3 +1,6 @@
+#ifndef DATA_H
+#define DATA_H
+
 #include <stdlib.h>
 #include "../products/product.h"
 #include "../users/user.h"
@@ -34,3 +37,5 @@ void data_delete(void *data);
 void data_remove(Datalist *data_list, User *user);
 
 void data_list_delete(Datalist *data_list);
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef CART_H
+#define CART_H
+
 #include "../list/list.h"
 
 typedef struct {
@@ -31,3 +34,5 @@ void cart_remove(Carts *carts_list, int user_id);
 void carts_list_delete(Carts *carts_list);
 
 Carts *carts_get();
+
+#endif

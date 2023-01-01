@@ -32,4 +32,7 @@ Node *list_find_lib(Node *list, int (*cmp)(void *, void *), void *context);
 int cmp_id_user_lib(void *item, void *id);
 int cmp_id_product_lib(void *item, void *id);
 
+void print_user_lib(void *user);
+void print_product_lib(void *product);
+
 #endif

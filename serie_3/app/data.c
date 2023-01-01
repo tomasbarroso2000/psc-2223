@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "data.h"
-#include "../users/user.h"
+#include "../utils.h"
 
 #define	DATA_SIZE(n_prod)	(sizeof(struct { Product *product; size_t quantity; }) * n_prod)
 
@@ -16,8 +16,9 @@ void print_data(void *data){
 	Data *dt = (Data *)data;
 	printf("\n######\t Data \t######\n\n");
 
-	User *user = (User *) dt->user;
-	//print_user(user);
+	User *user = dt->user;
+	printf("user_id: %d\n", user->id);
+	printf("user_name: %s\n", user->name);
 	
 	printf("##Products\n\n");
 	printf("total products: %ld \n", dt->n_products);
@@ -44,15 +45,20 @@ int cmp_user_data(void *item, void *user){
 
 void data_insert(Datalist *data_list, User *user, size_t n_products, void *prods){
 	Data *data = malloc(sizeof(*data) + DATA_SIZE(n_products));
-	memcpy(data->user, user, sizeof(*user));	
+	data->user = user;
+	//memcpy(data->user, user, sizeof(user));
+	//printf("user_id: %d\n", data->user->id);	
 	data->n_products = n_products;	
 	
 	struct { Product *product; size_t quantity; } products[n_products];
 	memmove(products, prods, DATA_SIZE(n_products));
 	
-	
+	//printf("total:%ld\n", n_products);
 	for(int i = 0; i < n_products; i++) {
-		memcpy(data->products[i].product, products[i].product, sizeof(products[i].product));
+		//printf("id: %d\n", (products[i].product)->id);
+		//memcpy(&(data->products[i].product), products[i].product, sizeof(products[i].product));
+		data->products[i].product = products[i].product;
+		//printf("prod_id: %d\n", (data->products[i].product)->id);
 		data->products[i].quantity = products[i].quantity;
 	}
 	
@@ -79,5 +85,3 @@ void data_list_delete(Datalist *data_list){
 	list_destroy(data_list->datalist, data_delete);
 	free(data_list);
 }
-
-int main(){return -1;}

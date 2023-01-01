@@ -219,10 +219,11 @@ void any_list_foreach_lib(Node *list, void (*do_it)(void *)) {
 
 Node *list_find_lib(Node *list, int (*cmp)(void *, void *), void *context) {
 	handle_init();
-	void (*li_find)(Node *list, void (*)(void *)) = dlsym(handle, "list_foreach");
-	check_dlsym(list_foreach_lib);
-	li_find(list, cmp, context);
+	Node* (*li_find)(Node *list, int (*cmp)(void *, void *), void *context) = dlsym(handle, "list_find");
+	check_dlsym(li_find);
+	Node *result = li_find(list, cmp, context);
 	handle_close();
+	return result;
 }
 
 int cmp_id_user_lib(void *item, void *id) {
@@ -240,7 +241,7 @@ int cmp_id_product_lib(void *item, void *id) {
 	check_dlsym(cp_id_product);
 	int result = cp_id_product(item, id);
 	handle_close();
-	return cp_id_product;
+	return result;
 }
 
 void print_user_lib(void *user){
@@ -251,7 +252,7 @@ void print_user_lib(void *user){
 	handle_close();
 }
 
-void print_product(void *product){
+void print_product_lib(void *product){
 	handle_init();
 	void (*print_p) (void *product) = dlsym(handle, "print_product");
 	check_dlsym(print_p);

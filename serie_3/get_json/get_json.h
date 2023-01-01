@@ -1,3 +1,6 @@
+#ifndef GET_JSON_H
+#define GET_JSON_H
+
 #include <curl/curl.h>
 #include <jansson.h>
 #include <stdbool.h>
@@ -30,3 +33,5 @@ size_t write_memory_callback(void *contents, size_t size, size_t nmemb, void *us
 json_t *load_json(const char *text);
 
 json_t *http_get_json_data(const char *url);
+
+#endif
