@@ -38,4 +38,6 @@ void data_remove(Datalist *data_list, User *user);
 
 void data_list_delete(Datalist *data_list);
 
+void print_data_users(void *data);
+
 #endif

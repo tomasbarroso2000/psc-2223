@@ -12,7 +12,7 @@ void data_list_init(Datalist *data_list){
 	data_list->total = 0;
 }
 
-void print_data(void *data){
+void print_data(void *data) {
 	Data *dt = (Data *)data;
 	printf("\n######\t Data \t######\n\n");
 
@@ -28,6 +28,16 @@ void print_data(void *data){
 		printf("\tId: %d\n", dt->products[i].product->id);
 		printf("\tQuantity: %ld\n", dt->products[i].quantity);
 	}
+}
+
+void print_data_users(void *data) {
+	Data *dt = (Data *)data;
+	
+	/*printf("\n######\t Users \t######\n\n");
+	User *user = dt->user;
+	printf("user_id: %d\n", user->id);
+	printf("user_name: %s\n", user->name);*/
+	print_user_lib(dt->user);
 }
 
 void print_datalist(Datalist *data_list){

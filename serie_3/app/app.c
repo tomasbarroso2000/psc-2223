@@ -7,32 +7,65 @@ static Users *users_list;
 static Carts *carts_list;
 static Datalist *data_list;
 
+int cmp_string(void *a, void *b) {
+	return strcmp(*(char **) a, *(char **) b);
+}
+
+void swap(Node *a, Node *b) {
+	printf("swap\n");
+	/*Data *temp = a;
+	*a = *b;
+	*b = *temp;*/
+	/*void *tmp;
+	memcpy(&tmp, &a, sizeof(a));
+	memcpy(&a, &b, sizeof(b));
+	memcpy(&b, &tmp, sizeof(tmp));*/
+	/*Data *d1 = (Data *)a;
+	Data *d2 = (Data *)b;
+	Data *temp = d1;
+	d1 = d2;
+	d2 = temp;*/
+	/*Node *tmp;
+	memcpy(tmp, a, sizeof(a));
+	memcpy(a, b, sizeof(b));
+	memcpy(b, tmp, sizeof(tmp));*/
+	Node *tmp = a;
+	*a = *b;
+	*b = *tmp;
+}	
+
+void sort(Datalist *data_list, int (*cmp)(void *, void *)) {
+	for (Node *p = data_list->datalist->next; p != data_list->datalist; p = p->next) {
+		for (Node *q = data_list->datalist->next; q != data_list->datalist; q = q->next) {
+			Data *dp = (Data *)(p->data);
+			Data *dq = (Data *)(q->data);
+			if (cmp(&(dq->user->name), &(dp->user->name)) > 0) {
+				swap(p, q);
+				break;
+			}
+			printf("rotate\n");
+		}
+		break;
+	}
+}
+
 void create_values(void *d) {
 	Cart *data = (Cart *)d;
 	Node *user_node = list_find_lib(users_list->users, cmp_id_user_lib, &(data->user_id));
 	if (user_node != NULL) {
 		struct { Product *product; size_t quantity; } products[data->n_products];
-		//size_t total_products = 0; 
 		
-		/*for(int j = 0;  j < data->n_products; j++) {
-			Node *product = list_find_lib(products_list->products, cmp_id_product_lib, &(data->products[j].id));
-			if(product != NULL) total_products++;
-		}
-		printf("total: %ld\n", total_products);*/
 		size_t total_products = 0;
 		for (size_t i = 0; i < data->n_products; i++) {
-			//printf("prod_id: %d\n", data->products[i].id);
+			
 			Node *product = list_find_lib(products_list->products, cmp_id_product_lib, &(data->products[i].id));
 			if(product != NULL) {
 				products[total_products].product = (Product *)(product->data);
-				//printf("prod_id: %d\n", (products[a].product)->id);
 				products[total_products].quantity = data->products[i].quantity;
-				//printf("prod_quant: %ld\n", products[a].quantity);
 				total_products++;
 			}
 		}
-		//printf("total: %d\n", a);
-		//printf("##\n");
+		
 		User *user = (User *)(user_node->data);
 		data_insert(data_list, user, total_products, products);
 	}
@@ -53,7 +86,15 @@ void populate() {
 int main() {
 	
 	populate();
-	print_datalist(data_list);
+	//print_datalist(data_list);
+	printf("Before sort\n");
+	any_list_foreach_lib(data_list->datalist, print_data_users);
+	
+	sort(data_list, cmp_string);
+	
+	printf("################\n");
+	printf("After sort\n");
+	any_list_foreach_lib(data_list->datalist, print_data_users);
 	
 	char line[100];
 	commands_list_init();
