@@ -25,6 +25,7 @@ int cmp_costs(void *a, void *b) {
 	return *((int*)a) - *((int*)b);
 }
 
+
 void swap(void *a, void *b) {
 	Data tmp = *((Data *)a);
 	*((Data *)a) = *((Data *)b);
@@ -98,11 +99,9 @@ void sort_carts(Datalist *data_list, int (*cmp)(void *, void *)) {
     Data tempvar;//temp variable to store node data
     n = data_list->datalist->next;
     //temp = node;//temp node to hold node data and next link
-    while(n != data_list->datalist)
-    {
+    while(n != data_list->datalist){
         temp=n; 
-        while (temp->next != data_list->datalist)//travel till the second last element 
-        {
+        while (temp->next != data_list->datalist){						//travel till the second last element 
            if(cart_costs(((Data *)(temp->data))->products, ((Data *)(temp->data))->n_products)  > cart_costs(((Data *)(temp->next->data))->products, ((Data *)(temp->next->data))->n_products) )// compare the data of the nodes 
             {
               tempvar = *(Data *)(temp->data);
@@ -132,6 +131,48 @@ void print_ordered_prices() {
 	//any_list_foreach_lib(data_list->datalist, print_data_users);
 }
 
+
+
+//-----------------------------------------------------------------------------------
+float cmp_prices(float a, float b) {
+	return (a) - (b);
+}
+
+
+void sort_dec_carts_by_price(Datalist *data_list) {
+	any_list_foreach_lib(carts_list->carts, create_values);
+	int a = 0;
+	//while(a < 10){
+		for (Node *p = data_list->datalist->next; p != data_list->datalist; p = p->next) {
+			for (Node *q = p->next; q != data_list->datalist; q = q->next) {
+			Data *dp = (Data *)(p->data);
+			Data *dq = (Data *)(q->data);
+			
+			if(dp != NULL && dq != NULL){
+				if (cmp_prices(cart_costs(&(dp->products), dp->n_products), cart_costs(&(dq->products), dq->n_products)) < 0) {
+				//printf("Welcome, this is our command\n");
+				//printf("Dp_user:%d Dp_price:%f vs Dq_user:%d Dq_price:%f\n", dp->user->id, cart_costs(&(dp->products), dp->n_products), dq->user->id, cart_costs(&(dq->products), dq->n_products));
+				swap(dp, dq);		
+					}
+				
+				}
+			}
+		}
+		//a++;
+	//}
+}
+
+void print_ordered_data_by_price() {
+	//any_list_foreach_lib(carts_list->carts, create_values);
+	printf("\n\n#####\tList carts (ordered by price)\t####");
+	printf("\n\n\t\t");
+	sort_dec_carts_by_price(data_list);
+	print_datalist(data_list);
+	//any_list_foreach_lib(data_list->datalist, print_data_users);
+}
+
+//-----------------------------------------------------------------------------------
+
 int main() {
 	
 	populate();
@@ -142,7 +183,8 @@ int main() {
 	
 	command_insert('h', "\t - Listar comandos existentes", print_commands);
 	command_insert('u', "\t - List users (alphabetically ordered by name)", print_ordered_users);
-	command_insert('c', "\t - List carts (ordered by price)", print_ordered_prices);
+	//command_insert('c', "\t - List carts (ordered by price)", print_ordered_prices);
+	command_insert('c', "\t - List carts (ordered by price)", print_ordered_data_by_price);
 	command_insert('n', "\t - Incorporar novo comando", command_new);
 
 	while (1) {
@@ -154,4 +196,6 @@ int main() {
 			command_execute(*command, name);
 	}
 }
+
+
 

@@ -30,11 +30,7 @@ void print_data(void *data) {
 
 void print_data_users(void *data) {
 	Data *dt = (Data *)data;
-	
-	/*printf("\n######\t Users \t######\n\n");
-	User *user = dt->user;
-	printf("user_id: %d\n", user->id);
-	printf("user_name: %s\n", user->name);*/
+
 	print_user_lib(dt->user);
 }
 
