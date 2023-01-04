@@ -13,24 +13,30 @@ void print_data(void *data) {
 	Data *dt = (Data *)data;
 	printf("\n######\t Data \t######\n\n");
 
-	User *user = dt->user;
+	/*User *user = dt->user;
 	printf("user_id: %d\n", user->id);
-	printf("user_name: %s\n", user->name);
+	printf("user_name: %s\n", user->name);*/
+	print_user_lib(dt->user);
 	
 	printf("##Products\n\n");
 	printf("total products: %ld \n", dt->n_products);
 	
 	for(int i = 0; i < dt->n_products; i++) {
-		printf("\n\t#Product\n");
+		/*printf("\n\t#Product\n");
 		printf("\tId: %d\n", dt->products[i].product->id);
 		printf("\tPrice: %.2f€\n", dt->products[i].product->price);
-		printf("\tQuantity: %ld\n", dt->products[i].quantity);
+		printf("\tQuantity: %ld\n", dt->products[i].quantity);*/
+		print_product_lib(dt->products[i].product);
 	}
 }
 
 void print_data_users(void *data) {
 	Data *dt = (Data *)data;
-
+	
+	/*printf("\n######\t Users \t######\n\n");
+	User *user = dt->user;
+	printf("user_id: %d\n", user->id);
+	printf("user_name: %s\n", user->name);*/
 	print_user_lib(dt->user);
 }
 
