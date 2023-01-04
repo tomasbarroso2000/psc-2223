@@ -11,28 +11,18 @@ int cmp_string(void *a, void *b) {
 	return strcmp(*(char **) a, *(char **) b);
 }
 
-void swap(Node *a, Node *b) {
+/*void swap(Node *a, Node *b) {
 	printf("swap\n");
-	/*Data *temp = a;
-	*a = *b;
-	*b = *temp;*/
-	/*void *tmp;
-	memcpy(&tmp, &a, sizeof(a));
-	memcpy(&a, &b, sizeof(b));
-	memcpy(&b, &tmp, sizeof(tmp));*/
-	/*Data *d1 = (Data *)a;
-	Data *d2 = (Data *)b;
-	Data *temp = d1;
-	d1 = d2;
-	d2 = temp;*/
-	/*Node *tmp;
-	memcpy(tmp, a, sizeof(a));
-	memcpy(a, b, sizeof(b));
-	memcpy(b, tmp, sizeof(tmp));*/
 	Node *tmp = a;
 	*a = *b;
 	*b = *tmp;
-}	
+}*/	
+
+void swap(void *a, void *b) {
+	Data tmp = *((Data *)a);
+	*((Data *)a) = *((Data *)b);
+	*((Data *)b) = tmp;
+}
 
 void sort(Datalist *data_list, int (*cmp)(void *, void *)) {
 	for (Node *p = data_list->datalist->next; p != data_list->datalist; p = p->next) {
@@ -40,12 +30,10 @@ void sort(Datalist *data_list, int (*cmp)(void *, void *)) {
 			Data *dp = (Data *)(p->data);
 			Data *dq = (Data *)(q->data);
 			if (cmp(&(dq->user->name), &(dp->user->name)) > 0) {
-				swap(p, q);
-				break;
+				swap(dp, dq);
 			}
-			printf("rotate\n");
+			//printf("rotate\n");
 		}
-		break;
 	}
 }
 
