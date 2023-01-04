@@ -4,9 +4,6 @@
 #include "data.h"
 #include "../utils.h"
 
-#define	DATA_SIZE(n_prod)	(sizeof(struct { Product *product; size_t quantity; }) * n_prod)
-
-
 void data_list_init(Datalist *data_list){
 	data_list->datalist = list_create();
 	data_list->total = 0;
@@ -26,6 +23,7 @@ void print_data(void *data) {
 	for(int i = 0; i < dt->n_products; i++) {
 		printf("\n\t#Product\n");
 		printf("\tId: %d\n", dt->products[i].product->id);
+		printf("\tPrice: %.2f€\n", dt->products[i].product->price);
 		printf("\tQuantity: %ld\n", dt->products[i].quantity);
 	}
 }

@@ -7,6 +7,8 @@
 #include "../carts/cart.h"
 #include "../list/list.h"
 
+#define	DATA_SIZE(n_prod)	(sizeof(struct { Product *product; size_t quantity; }) * n_prod)
+
 typedef struct {
 	User *user;
 	size_t n_products;
