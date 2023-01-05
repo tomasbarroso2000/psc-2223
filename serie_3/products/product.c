@@ -11,15 +11,16 @@ void products_list_init(Products *products_list) {
 
 void print_product(void *product) {
 	Product *data = (Product *)product;
-	//printf("\n###\t Product \t###\n\n");
+	
 	printf("Id: %d\n", data->id);
 	printf("Price: %f €\n", data->price);
 	printf("Description: %s\n", data->description);
-	printf("Category: %s\n", data->category);
+	printf("Category: %s\n\n", data->category);
 }
 
 void print_products(Products *products_list) {
-	printf("Total of products = %d\n", products_list->total);
+	printf("\n\t PRODUCTS \t\n\n");
+	printf("Number of products = %d\n\n", products_list->total);
 	if(products_list->total > 0)
 		list_foreach(products_list->products, print_product);
 	else

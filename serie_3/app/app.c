@@ -115,8 +115,8 @@ void sort_carts(Datalist *data_list, int (*cmp)(void *, void *)) {
 }
 
 void print_ordered_users() {
-	printf("\n\n List of users (alphabetically ordered by name)\t");
-	printf("\n\n\t\t");
+	printf("\n\n \t List of Users (alphabetically ordered by name)\t\n\n");
+	//printf("\n\n\t\t");
 	sort_users(data_list, cmp_string);
 	any_list_foreach_lib(data_list->datalist, print_data_users);
 }

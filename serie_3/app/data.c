@@ -11,7 +11,7 @@ void data_list_init(Datalist *data_list){
 
 void print_data(void *data) {
 	Data *dt = (Data *)data;
-	printf("\nData\n");
+	//printf("\nData\n");
 
 	/*User *user = dt->user;
 	printf("user_id: %d\n", user->id);
@@ -19,7 +19,7 @@ void print_data(void *data) {
 	print_user_lib(dt->user);
 	
 	printf("total products: %ld \n", dt->n_products);
-	printf("Products\n\n");
+	printf("Products:\n\n");
 	
 	for(int i = 0; i < dt->n_products; i++) {
 		/*printf("\n\t#Product\n");
@@ -41,11 +41,12 @@ void print_data_users(void *data) {
 }
 
 void print_datalist(Datalist *data_list){
+	printf("\n\t DATA \t\n\n");
 	printf("Number of data = %d\n", data_list->total);
 	if(data_list->total > 0)
 		list_foreach(data_list->datalist, print_data);
 	else
-		printf("\n\t ### No data ### \t\n");
+		printf("\n\t No available data \t\n");
 }
 
 int cmp_user_data(void *item, void *user){
