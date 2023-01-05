@@ -11,15 +11,15 @@ void data_list_init(Datalist *data_list){
 
 void print_data(void *data) {
 	Data *dt = (Data *)data;
-	printf("\n######\t Data \t######\n\n");
+	printf("\nData\n");
 
 	/*User *user = dt->user;
 	printf("user_id: %d\n", user->id);
 	printf("user_name: %s\n", user->name);*/
 	print_user_lib(dt->user);
 	
-	printf("##Products\n\n");
 	printf("total products: %ld \n", dt->n_products);
+	printf("Products\n\n");
 	
 	for(int i = 0; i < dt->n_products; i++) {
 		/*printf("\n\t#Product\n");

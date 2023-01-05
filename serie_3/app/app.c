@@ -115,7 +115,7 @@ void sort_carts(Datalist *data_list, int (*cmp)(void *, void *)) {
 }
 
 void print_ordered_users() {
-	printf("\n\n#####\tList users (alphabetically ordered by name)\t####");
+	printf("\n\n List of users (alphabetically ordered by name)\t");
 	printf("\n\n\t\t");
 	sort_users(data_list, cmp_string);
 	any_list_foreach_lib(data_list->datalist, print_data_users);
@@ -123,7 +123,7 @@ void print_ordered_users() {
 
 void print_ordered_prices() {
 	any_list_foreach_lib(carts_list->carts, create_values);
-	printf("\n\n#####\tList carts (ordered by price)\t####");
+	printf("\n\n\t List of carts (ordered by price)\t");
 	printf("\n\n\t\t");
 	sort_carts(data_list, cmp_costs);
 	sort_carts(data_list, cmp_costs);
@@ -164,7 +164,7 @@ void sort_dec_carts_by_price(Datalist *data_list) {
 
 void print_ordered_data_by_price() {
 	//any_list_foreach_lib(carts_list->carts, create_values);
-	printf("\n\n#####\tList carts (ordered by price)\t####");
+	printf("\n\n\tCarts List (ordered by price)\t");
 	printf("\n\n\t\t");
 	sort_dec_carts_by_price(data_list);
 	print_datalist(data_list);
@@ -181,12 +181,15 @@ int main() {
 	char line[100];
 	commands_list_init();
 	
-	command_insert('h', "\t - Listar comandos existentes", print_commands);
-	command_insert('u', "\t - List users (alphabetically ordered by name)", print_ordered_users);
+	command_insert('h', "List existing commands", print_commands);
+	command_insert('u', "List users (alphabetically ordered by name)", print_ordered_users);
 	//command_insert('c', "\t - List carts (ordered by price)", print_ordered_prices);
-	command_insert('c', "\t - List carts (ordered by price)", print_ordered_data_by_price);
-	command_insert('n', "\t - Incorporar novo comando", command_new);
+	command_insert('c', "List carts (ordered by price)", print_ordered_data_by_price);
+	command_insert('n', "Embed new command", command_new);
 
+	printf("\n\t\t Welcome to the Cart Info application!\t\t\n\n");
+	printf("\tHere you can check the carts, users and products information.\n");
+	printf("\tTo see the available commands put 'h' below.\n\n");
 	while (1) {
 		putchar('>');
 		fgets(line, sizeof line, stdin);

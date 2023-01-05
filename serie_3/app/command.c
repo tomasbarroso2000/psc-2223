@@ -16,17 +16,18 @@ void commands_list_init() {
 
 void print_command(void *command) {
 	Command *data = (Command *)command;
-	printf("\n###\t Command \t###\n\n");
+	//printf("\n###\t Command \t###\n\n");
 	printf("Letter: %c\n", data->letter);
-	printf("Description: %s\n", data->description);
+	printf("Description: %s\n\n", data->description);
 }
 
 void print_commands() {
-	printf("Número de comandos = %d\n", commands_list->total);
+	printf("\n\t COMMANDS \t\n\n");
+	printf("Total number of commands = %d\n\n", commands_list->total);
 	if(commands_list->total > 0)
 		list_foreach(commands_list->commands, print_command);
 	else
-		printf("\n\t ### No commands ### \t\n");
+		printf("\n\t No available commands \t\n");
 }
 
 int cmp_letter_command(void *item, void *letter) {
