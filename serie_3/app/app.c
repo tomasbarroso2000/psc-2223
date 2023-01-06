@@ -79,39 +79,35 @@ void sort_users(Datalist *data_list, int (*cmp)(void *, void *)) {
 	}
 }
 
-void sort_carts(Datalist *data_list, int (*cmp)(void *, void *)) {
-	//any_list_foreach_lib(carts_list->carts, create_values);
+float compare_nodes(void *a, void *b) {
+	printf("%ld\n", ((Data *)a)->n_products);
+  float n1_cost = cart_costs(((Data *)a)->products, ((Data *)a)->n_products);
+  float n2_cost = cart_costs(((Data *)b)->products, ((Data *)b)->n_products);
+  printf("%f <==> %f \n", n1_cost, n2_cost);
+  return n1_cost - n2_cost;
+}
+
+void sort_carts(Datalist *data_list, float (*cmp)(void *, void *)) {
+	printf("size: %d\n", data_list->total);
 	
-	/*for (Node *current = data_list->datalist->next; current != data_list->datalist; current = current->next) {
+	for (Node *current = data_list->datalist->next; current != data_list->datalist; current = current->next) {
 		for (Node *index = current->next; index != data_list->datalist; index = index->next) {
 			Data *cd = (Data *)(current->data);
 			Data *id = (Data *)(index->data);
 			float cd_cost = cart_costs(cd->products, cd->n_products);
 			float id_cost = cart_costs(id->products, id->n_products);
 			if (id_cost > cd_cost) {
-				printf("%d <=> %d\n", cd->user->id, id->user->id);
-				swap(id, cd);
+				printf("switch\n");
+				printf("%d - %f <=> %d - %f\n", cd->user->id, cd_cost, id->user->id, id_cost);
+				
+				Data *temp;
+				memcpy(&temp, &(current->data), sizeof(current->data));
+				memcpy(&(current->data), &(index->data), sizeof(index->data));
+				memcpy(&(index->data), &temp, sizeof(temp));
+				
 			}
-		}
-	} */
-	
-	Node *n=NULL, *temp = NULL;
-    Data tempvar;//temp variable to store node data
-    n = data_list->datalist->next;
-    //temp = node;//temp node to hold node data and next link
-    while(n != data_list->datalist){
-        temp=n; 
-        while (temp->next != data_list->datalist){						//travel till the second last element 
-           if(cart_costs(((Data *)(temp->data))->products, ((Data *)(temp->data))->n_products)  > cart_costs(((Data *)(temp->next->data))->products, ((Data *)(temp->next->data))->n_products) )// compare the data of the nodes 
-            {
-              tempvar = *(Data *)(temp->data);
-              *(Data *)(temp->data) = *(Data *)(temp->next->data);// swap the data
-              *(Data *)(temp->next->data) = tempvar;
-            }
-         temp = temp->next;    // move to the next element 
-        }
-        n = n->next;    // move to the next node
-    }
+		} 
+	}
 }
 
 void print_ordered_users() {
@@ -124,54 +120,11 @@ void print_ordered_users() {
 void print_ordered_prices() {
 	any_list_foreach_lib(carts_list->carts, create_values);
 	printf("\n\n#####\tList carts (ordered by price)\t####");
-	printf("\n\n\t\t");
-	sort_carts(data_list, cmp_costs);
-	sort_carts(data_list, cmp_costs);
-	print_datalist(data_list);
-	//any_list_foreach_lib(data_list->datalist, print_data_users);
+	sort_carts(data_list, compare_nodes);
+	//print_datalist(data_list);
+	any_list_foreach_lib(data_list->datalist, print_data_users);
 }
 
-
-
-//-----------------------------------------------------------------------------------
-float cmp_prices(float a, float b) {
-	return (a) - (b);
-}
-
-
-void sort_dec_carts_by_price(Datalist *data_list) {
-	any_list_foreach_lib(carts_list->carts, create_values);
-	int a = 0;
-	//while(a < 10){
-		for (Node *p = data_list->datalist->next; p != data_list->datalist; p = p->next) {
-			for (Node *q = p->next; q != data_list->datalist; q = q->next) {
-			Data *dp = (Data *)(p->data);
-			Data *dq = (Data *)(q->data);
-			
-			if(dp != NULL && dq != NULL){
-				if (cmp_prices(cart_costs(&(dp->products), dp->n_products), cart_costs(&(dq->products), dq->n_products)) < 0) {
-				//printf("Welcome, this is our command\n");
-				//printf("Dp_user:%d Dp_price:%f vs Dq_user:%d Dq_price:%f\n", dp->user->id, cart_costs(&(dp->products), dp->n_products), dq->user->id, cart_costs(&(dq->products), dq->n_products));
-				swap(dp, dq);		
-					}
-				
-				}
-			}
-		}
-		//a++;
-	//}
-}
-
-void print_ordered_data_by_price() {
-	//any_list_foreach_lib(carts_list->carts, create_values);
-	printf("\n\n#####\tList carts (ordered by price)\t####");
-	printf("\n\n\t\t");
-	sort_dec_carts_by_price(data_list);
-	print_datalist(data_list);
-	//any_list_foreach_lib(data_list->datalist, print_data_users);
-}
-
-//-----------------------------------------------------------------------------------
 
 int main() {
 	
@@ -183,8 +136,7 @@ int main() {
 	
 	command_insert('h', "\t - Listar comandos existentes", print_commands);
 	command_insert('u', "\t - List users (alphabetically ordered by name)", print_ordered_users);
-	//command_insert('c', "\t - List carts (ordered by price)", print_ordered_prices);
-	command_insert('c', "\t - List carts (ordered by price)", print_ordered_data_by_price);
+	command_insert('c', "\t - List carts (ordered by price)", print_ordered_prices);
 	command_insert('n', "\t - Incorporar novo comando", command_new);
 
 	while (1) {
