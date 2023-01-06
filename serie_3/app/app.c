@@ -88,7 +88,7 @@ float compare_nodes(void *a, void *b) {
 }
 
 void sort_carts(Datalist *data_list, float (*cmp)(void *, void *)) {
-	printf("size: %d\n", data_list->total);
+	any_list_foreach_lib(carts_list->carts, create_values);
 	
 	for (Node *current = data_list->datalist->next; current != data_list->datalist; current = current->next) {
 		for (Node *index = current->next; index != data_list->datalist; index = index->next) {
@@ -118,7 +118,7 @@ void print_ordered_users() {
 }
 
 void print_ordered_prices() {
-	printf("\n\n#####\tList carts (ordered by price)\t####");
+	printf("\n\n#####\tList carts (ordere	d by price)\t####");
 	sort_carts(data_list, compare_nodes);
 	//print_datalist(data_list);
 	any_list_foreach_lib(data_list->datalist, print_data_users);
