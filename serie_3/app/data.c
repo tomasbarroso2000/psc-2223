@@ -16,6 +16,7 @@ void print_data(void *data) {
 	/*User *user = dt->user;
 	printf("user_id: %d\n", user->id);
 	printf("user_name: %s\n", user->name);*/
+	printf("User info:\n");
 	print_user_lib(dt->user);
 	
 	printf("total products: %ld \n", dt->n_products);
@@ -42,7 +43,7 @@ void print_data_users(void *data) {
 
 void print_datalist(Datalist *data_list){
 	printf("\n\t DATA \t\n\n");
-	printf("Number of data = %d\n", data_list->total);
+	printf("Total number of data = %d\n", data_list->total);
 	if(data_list->total > 0)
 		list_foreach(data_list->datalist, print_data);
 	else
