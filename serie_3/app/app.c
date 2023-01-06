@@ -111,18 +111,57 @@ void sort_carts(Datalist *data_list, float (*cmp)(void *, void *)) {
 }
 
 void print_ordered_users() {
-	printf("\n\n#####\tList users (alphabetically ordered by name)\t####");
-	printf("\n\n\t\t");
+	printf("\n\n \t List of Users (alphabetically ordered by name)\t\n\n");
+	//printf("\n\n\t\t");
 	sort_users(data_list, cmp_string);
 	any_list_foreach_lib(data_list->datalist, print_data_users);
 }
 
 void print_ordered_prices() {
-	any_list_foreach_lib(carts_list->carts, create_values);
 	printf("\n\n#####\tList carts (ordered by price)\t####");
 	sort_carts(data_list, compare_nodes);
 	//print_datalist(data_list);
 	any_list_foreach_lib(data_list->datalist, print_data_users);
+}
+
+
+
+//-----------------------------------------------------------------------------------
+float cmp_prices(float a, float b) {
+	return (a) - (b);
+}
+
+
+void sort_dec_carts_by_price(Datalist *data_list) {
+	any_list_foreach_lib(carts_list->carts, create_values);
+	int a = 0;
+	//while(a < 10){
+		for (Node *p = data_list->datalist->next; p != data_list->datalist; p = p->next) {
+			for (Node *q = p->next; q != data_list->datalist; q = q->next) {
+			Data *dp = (Data *)(p->data);
+			Data *dq = (Data *)(q->data);
+			
+			if(dp != NULL && dq != NULL){
+				if (cmp_prices(cart_costs(&(dp->products), dp->n_products), cart_costs(&(dq->products), dq->n_products)) < 0) {
+				//printf("Welcome, this is our command\n");
+				//printf("Dp_user:%d Dp_price:%f vs Dq_user:%d Dq_price:%f\n", dp->user->id, cart_costs(&(dp->products), dp->n_products), dq->user->id, cart_costs(&(dq->products), dq->n_products));
+				swap(dp, dq);		
+					}
+				
+				}
+			}
+		}
+		//a++;
+	//}
+}
+
+void print_ordered_data_by_price() {
+	//any_list_foreach_lib(carts_list->carts, create_values);
+	printf("\n\n\tCarts List (ordered by price)\t");
+	printf("\n\n\t\t");
+	sort_dec_carts_by_price(data_list);
+	print_datalist(data_list);
+	//any_list_foreach_lib(data_list->datalist, print_data_users);
 }
 
 
@@ -139,6 +178,9 @@ int main() {
 	command_insert('c', "\t - List carts (ordered by price)", print_ordered_prices);
 	command_insert('n', "\t - Incorporar novo comando", command_new);
 
+	printf("\n\t\t Welcome to the Cart Info application!\t\t\n\n");
+	printf("\tHere you can check the carts, users and products information.\n");
+	printf("\tTo see the available commands put 'h' below.\n\n");
 	while (1) {
 		putchar('>');
 		fgets(line, sizeof line, stdin);

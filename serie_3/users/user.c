@@ -12,18 +12,19 @@ void users_list_init(Users *users_list) {
 
 void print_user(void *user) {
 	User *data = (User *)user;
-	printf("\n###\t User \t###\n\n");
-	printf("id: %d\n", data->id);
-	printf("name: %s\n", data->name);
+	
+	printf("Id: %d\n", data->id);
+	printf("Name: %s\n\n", data->name);
 }
 
 
 void print_users(Users *users_list) {
-	printf("Número de utilizadores = %d\n", users_list->total);
+	printf("\n\t USERS \t\n\n");
+	printf("Number of users = %d\n\n", users_list->total);
 	if(users_list->total > 0)
 		list_foreach(users_list->users, print_user);
 	else
-		printf("\n\t ### No users ### \t\n");
+		printf("\n\t There's no user to be found \t\n");
 }
 
 

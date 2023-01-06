@@ -13,8 +13,8 @@ void carts_list_init(Carts *carts_list) {
 
 void print_cart(void *cart) {
 	Cart *data = (Cart *)cart;
-	printf("\n###\t Cart \t###\n\n");
-	printf("user id: %d\n", data->user_id);
+	//printf("\n###\t Cart \t###\n\n");
+	printf("User id: %d\n", data->user_id);
 	printf("##Products\n\n");
 	printf("total products: %ld \n", data->n_products);
 	
