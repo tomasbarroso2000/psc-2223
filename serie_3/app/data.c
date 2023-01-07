@@ -67,10 +67,11 @@ void data_insert(Datalist *data_list, User *user, size_t n_products, void *prods
 	
 	//printf("total:%ld\n", n_products);
 	for(int i = 0; i < n_products; i++) {
-		//printf("id: %d\n", (products[i].product)->id);
+		printf("inside insert id: %d\n", (products[i].product)->id);
 		//memcpy(&(data->products[i].product), products[i].product, sizeof(products[i].product));
 		data->products[i].product = products[i].product;
-		//printf("prod_id: %d\n", (data->products[i].product)->id);
+		
+		printf("inside insert quantity: %ld\n", products[i].quantity);
 		data->products[i].quantity = products[i].quantity;
 	}
 	
