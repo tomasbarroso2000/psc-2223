@@ -7,6 +7,7 @@ static Users *users_list;
 static Carts *carts_list;
 static Datalist *data_list;
 static Datalist *ordered_datalist;
+static Commands *commands_list;
 
 float cart_costs(void *prods, size_t n_products) {
 	float total = 0;
@@ -96,8 +97,7 @@ void sort_carts(Datalist *data_list, float (*cmp)(void *, void *)) {
 
 void print_ordered_users() {
 	system("clear");
-	printf("\n\n \t List of Users (alphabetically ordered by name)\t\n\n");
-	//printf("\n\n\t\t");
+	printf("\n\n\tList of Users (alphabetically ordered by name)\t\n\n");
 	ordered_datalist = malloc(sizeof *ordered_datalist);
 	data_list_init(ordered_datalist);
 	ordered_datalist = data_list;
@@ -107,13 +107,40 @@ void print_ordered_users() {
 
 void print_ordered_prices() {
 	system("clear");
-	printf("\n\n#####\tList carts (ordere	d by price)\t####");
+	printf("\n\n\tList of Carts (ordered by price)\t\n\n");
 	ordered_datalist = malloc(sizeof *ordered_datalist);
 	data_list_init(ordered_datalist);
 	ordered_datalist = data_list;
 	sort_carts(ordered_datalist, compare_nodes);
-	//print_datalist(data_list);
-	any_list_foreach_lib(ordered_datalist->datalist, print_data_users);
+	print_datalist(ordered_datalist);
+}
+
+void leave(){
+	system("clear");
+	printf("\nBye!\nExiting program...\n");
+	
+	if (ordered_datalist != NULL)
+		data_list_delete(ordered_datalist);
+	else 
+		data_list_delete(data_list);
+	
+	products_delete_lib(products_list);
+	users_delete_lib(users_list);
+	carts_delete_lib(carts_list);
+	
+	commands_list_delete(commands_list);
+	
+	exit(0);
+	
+}
+
+void help() {
+	printf("\n\t COMMANDS \t\n\n");
+	printf("Total number of commands = %d\n\n", commands_list->total);
+	if(commands_list->total > 0)
+		list_foreach(commands_list->commands, print_command);
+	else
+		printf("\n\t No available commands \t\n");
 }
 
 int main() {
@@ -122,23 +149,26 @@ int main() {
 	system("clear");
 	
 	char line[100];
-	commands_list_init();
+	commands_list = malloc(sizeof *commands_list);
+	commands_list_init(commands_list);
 	
-	command_insert('h', "\t - Listar comandos existentes", print_commands);
-	command_insert('u', "\t - List users (alphabetically ordered by name)", print_ordered_users);
-	command_insert('c', "\t - List carts (ordered by price)", print_ordered_prices);
-	command_insert('n', "\t - Incorporar novo comando", command_new);
+	command_insert(commands_list, 'h', "\tList existing commands", help);
+	command_insert(commands_list, 'u', "\tList users (alphabetically ordered by name)", print_ordered_users);
+	command_insert(commands_list, 'c', "\tList carts (ordered by price)", print_ordered_prices);
+	command_insert(commands_list, 'n', "\tEmbed new command", command_new);
+	command_insert(commands_list, 's', "\tExit program", leave);
 
-	printf("\n\t\t Welcome to the Cart Info application!\t\t\n\n");
+	printf("\n\t\tWelcome to the GET JSON Application!\t\t\n\n");
 	printf("\tHere you can check the carts, users and products information.\n");
-	printf("\tTo see the available commands put 'h' below.\n\n");
+	printf("\tTo see the available commands type 'h' below.\n\n");
 	while (1) {
+		printf("\nChoose a command\n");
 		putchar('>');
 		fgets(line, sizeof line, stdin);
 		char *command = strtok(line, " \n");
 		char *name = strtok(NULL, " \n");
 		if (command != NULL)
-			command_execute(*command, name);
+			command_execute(commands_list, *command, name);
 	}
 }
 

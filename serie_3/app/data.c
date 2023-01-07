@@ -11,43 +11,33 @@ void data_list_init(Datalist *data_list){
 
 void print_data(void *data) {
 	Data *dt = (Data *)data;
-	//printf("\nData\n");
 
-	/*User *user = dt->user;
-	printf("user_id: %d\n", user->id);
-	printf("user_name: %s\n", user->name);*/
-	printf("User info:\n");
+	printf("\nUSER:\n\n");
 	print_user_lib(dt->user);
 	
-	printf("total products: %ld \n", dt->n_products);
-	printf("Products:\n\n");
+	printf("\nCART\n");
+	printf("\n\tTotal products: %ld \n", dt->n_products);
+	printf("\n\tProducts\t\n");
 	
-	for(int i = 0; i < dt->n_products; i++) {
-		/*printf("\n\t#Product\n");
-		printf("\tId: %d\n", dt->products[i].product->id);
-		printf("\tPrice: %.2f€\n", dt->products[i].product->price);
-		printf("\tQuantity: %ld\n", dt->products[i].quantity);*/
+	for(int i = 0; i < dt->n_products; i++) 
 		print_product_lib(dt->products[i].product);
-	}
+	
+	printf("\n==========================================================================================================================================================\n");
 }
 
 void print_data_users(void *data) {
 	Data *dt = (Data *)data;
 	
-	/*printf("\n######\t Users \t######\n\n");
-	User *user = dt->user;
-	printf("user_id: %d\n", user->id);
-	printf("user_name: %s\n", user->name);*/
 	print_user_lib(dt->user);
+	printf("\n=====================================================\n");
 }
 
 void print_datalist(Datalist *data_list){
-	printf("\n\t DATA \t\n\n");
 	printf("Total number of data = %d\n", data_list->total);
 	if(data_list->total > 0)
-		list_foreach(data_list->datalist, print_data);
+		list_foreach(data_list->datalist, print_data);	
 	else
-		printf("\n\t No available data \t\n");
+		printf("\n\tNo available data\t\n");
 }
 
 int cmp_user_data(void *item, void *user){
@@ -58,17 +48,14 @@ int cmp_user_data(void *item, void *user){
 void data_insert(Datalist *data_list, User *user, size_t n_products, void *prods){
 	Data *data = malloc(sizeof(*data) + DATA_SIZE(n_products));
 	data->user = user;
-	//memcpy(data->user, user, sizeof(user));
-	//printf("user_id: %d\n", data->user->id);	
 	data->n_products = n_products;	
 	
 	struct { Product *product; size_t quantity; } products[n_products];
 	memmove(products, prods, DATA_SIZE(n_products));
 	
-	//printf("total:%ld\n", n_products);
+
 	for(int i = 0; i < n_products; i++) {
 		printf("inside insert id: %d\n", (products[i].product)->id);
-		//memcpy(&(data->products[i].product), products[i].product, sizeof(products[i].product));
 		data->products[i].product = products[i].product;
 		
 		printf("inside insert quantity: %ld\n", products[i].quantity);

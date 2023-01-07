@@ -11,11 +11,10 @@ void products_list_init(Products *products_list) {
 
 void print_product(void *product) {
 	Product *data = (Product *)product;
-	
-	printf("Id: %d\n", data->id);
-	printf("Price: %f €\n", data->price);
-	printf("Description: %s\n", data->description);
-	printf("Category: %s\n\n", data->category);
+	printf("\t\t\tId: %d\n", data->id);
+	printf("\t\t\tPrice: %f €\n", data->price);
+	printf("\t\t\tDescription: %s\n", data->description);
+	printf("\t\t\tCategory: %s\n\n", data->category);
 }
 
 void print_products(Products *products_list) {

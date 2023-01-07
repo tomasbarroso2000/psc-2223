@@ -13,8 +13,8 @@ void users_list_init(Users *users_list) {
 void print_user(void *user) {
 	User *data = (User *)user;
 	
-	printf("Id: %d\n", data->id);
-	printf("Name: %s\n\n", data->name);
+	printf("\tId: %d\n", data->id);
+	printf("\tName: %s\n", data->name);
 }
 
 

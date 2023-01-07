@@ -5,29 +5,18 @@
 #include <dlfcn.h>
 #include <errno.h>
 
-static Commands *commands_list;
 
 
-void commands_list_init() {
-	commands_list = malloc(sizeof *commands_list);
+void commands_list_init(Commands *commands_list) {
 	commands_list->commands = list_create();
 	commands_list->total = 0;
 }
 
 void print_command(void *command) {
 	Command *data = (Command *)command;
-	//printf("\n###\t Command \t###\n\n");
+
 	printf("Letter: %c\n", data->letter);
 	printf("Description: %s\n\n", data->description);
-}
-
-void print_commands() {
-	printf("\n\t COMMANDS \t\n\n");
-	printf("Total number of commands = %d\n\n", commands_list->total);
-	if(commands_list->total > 0)
-		list_foreach(commands_list->commands, print_command);
-	else
-		printf("\n\t No available commands \t\n");
 }
 
 int cmp_letter_command(void *item, void *letter) {
@@ -35,7 +24,7 @@ int cmp_letter_command(void *item, void *letter) {
 	return ((Command *)data)->letter == *((char *) letter);
 }
 
-void command_insert(char letter, char *description, void *command) {
+void command_insert(Commands *commands_list, char letter, char *description, void *command) {
 	if(list_find(commands_list->commands, cmp_letter_command, &letter) != NULL) {
 		fprintf(stderr, "Command with letter [%c] already exists!\n", letter);
 	}
@@ -55,7 +44,7 @@ void command_delete(void *command) {
 	free(command);
 }
 
-void product_remove(char letter) {
+void command_remove(Commands *commands_list, char letter) {
 	Node *command = list_find(commands_list->commands, cmp_letter_command, &letter);
 	if(command != NULL) {
 		list_remove(command);
@@ -66,22 +55,23 @@ void product_remove(char letter) {
 		fprintf(stderr, "Command with letter [%c] does not exist\n", letter);
 }
 
-void products_list_delete() {
+void commands_list_delete(Commands *commands_list) {
 	list_destroy(commands_list->commands, command_delete);
 	free(commands_list);
 }
 
-// Start...
-//static Command *commands = NULL;
 
-void command_execute(char letter, char *param) {
+void command_execute(Commands *commands_list, char letter, char *param) {
 	Node *command_node = list_find(commands_list->commands, cmp_letter_command, &letter);
 	
-	if (command_node == NULL) return;
-	
+	if (command_node == NULL) {
+		printf("Invalid command.\nPlease type 'h' to see the available commands.\n\n");
+		return;
+		}
+		
 	Command *cmd = (Command *) (command_node->data);
 	
-	void (*func) (void *) =  *cmd->func;
+	void (*func) (void *) =  cmd->func;
 	
 	func(param);
 	
@@ -89,9 +79,7 @@ void command_execute(char letter, char *param) {
 		
 }
 
-//static void *handle;
-
-void command_new(char *lib) {
+void command_new(Commands *commands_list, char *lib) {
 	void *handle = dlopen(lib, RTLD_LAZY);
 	
 	if (handle == NULL) {
@@ -114,29 +102,8 @@ void command_new(char *lib) {
 		fprintf(stderr, "%s\n", dlerror());
 		return;
 	}
-	command_insert(*letter, *description, *func);
+	command_insert(commands_list, *letter, *description, *func);
 }
-
-
-/*
-void leave_program(char *unused) {
-	void *next;
-	for (User *p = queue.next; p != &queue; p = next) {
-		next = p->next;
-		p->prev->next = p->next;
-		p->next->prev = p->prev;
-		free(p->name);
-		free(p);
-	}
-	for (Command *p = commands; p != NULL; p = next) {
-		next = p->next;
-		free(p->desc);
-		free(p);
-	}
-	if (handle != NULL)
-		dlclose(handle);
-	exit(0);
-}*/
 
 
 

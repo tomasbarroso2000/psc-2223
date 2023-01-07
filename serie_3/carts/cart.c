@@ -13,7 +13,6 @@ void carts_list_init(Carts *carts_list) {
 
 void print_cart(void *cart) {
 	Cart *data = (Cart *)cart;
-	//printf("\n###\t Cart \t###\n\n");
 	printf("User id: %d\n", data->user_id);
 	printf("##Products\n\n");
 	printf("total products: %ld \n", data->n_products);
@@ -26,11 +25,11 @@ void print_cart(void *cart) {
 }
 
 void print_carts(Carts *carts_list) {
-	printf("Número de carrinhos = %d\n", carts_list->total);
+	printf("Number of carts = %d\n", carts_list->total);
 	if(carts_list->total > 0)
 		list_foreach(carts_list->carts, print_cart);
 	else
-		printf("\n\t ### No carts ### \t\n");
+		printf("\n\t No carts where found \t\n");
 }
 
 int cmp_id_cart(void *item, void *id) {
@@ -77,7 +76,7 @@ void carts_list_delete(Carts *carts_list) {
 
 Carts *carts_get() {
 	Carts *carts_list = malloc(sizeof *carts_list);
-	printf("after arts list malloc\n");
+	printf("after carts list malloc\n");
 	carts_list_init(carts_list);
 	json_t *res = http_get_json_data("https://dummyjson.com/carts");
 	json_t *json_array = json_object_get(res, "carts");
