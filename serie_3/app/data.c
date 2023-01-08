@@ -9,6 +9,16 @@ void data_list_init(Datalist *data_list){
 	data_list->total = 0;
 }
 
+float cart_costs(void *prods, size_t n_products) {
+	float total = 0;
+	struct { Product *product; size_t quantity; } products[n_products];
+	memmove(products, prods, DATA_SIZE(n_products));
+	for(int i = 0; i < n_products; i++) {
+		total += (products[i].product->price * products[i].quantity);
+	}
+	return total;
+}
+
 void print_data(void *data) {
 	Data *dt = (Data *)data;
 
@@ -17,10 +27,13 @@ void print_data(void *data) {
 	
 	printf("\nCART\n");
 	printf("\n\tTotal products: %ld \n", dt->n_products);
+	printf("\n\tTotal cost: %.2f €\n", cart_costs(dt->products, dt->n_products));
 	printf("\n\tProducts\t\n");
 	
-	for(int i = 0; i < dt->n_products; i++) 
+	for(int i = 0; i < dt->n_products; i++) {
 		print_product_lib(dt->products[i].product);
+		printf("\t\t\tQuantity: %ld\n\n", dt->products[i].quantity);
+	}
 	
 	printf("\n==========================================================================================================================================================\n");
 }

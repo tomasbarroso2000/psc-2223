@@ -72,7 +72,7 @@ void products_list_delete(Products *products_list) {
 Products *products_get() {
 	Products *products_list = malloc(sizeof *products_list);
 	products_list_init(products_list);
-	json_t *res = http_get_json_data("https://dummyjson.com/products");
+	json_t *res = http_get_json_data("https://dummyjson.com/products?limit=100");
 	json_t *json_array = json_object_get(res, "products");
 	
 	for(int j = 0; j < json_array_size(json_array); j++) {

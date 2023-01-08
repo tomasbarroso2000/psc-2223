@@ -2,22 +2,12 @@
 #include <stdio.h>
 #include "app.h"
 
-static Products *products_list;
-static Users *users_list;
-static Carts *carts_list;
-static Datalist *data_list;
-static Datalist *ordered_datalist;
-static Commands *commands_list;
-
-float cart_costs(void *prods, size_t n_products) {
-	float total = 0;
-	struct { Product *product; size_t quantity; } products[n_products];
-	memmove(products, prods, DATA_SIZE(n_products));
-	for(int i = 0; i < n_products; i++) {
-		total += (products[i].product->price * products[i].quantity);
-	}
-	return total;
-}
+Products *products_list;
+Users *users_list;
+Carts *carts_list;
+Datalist *data_list;
+Datalist *ordered_datalist;
+Commands *commands_list;
 
 int cmp_string(void *a, void *b) {
 	return strcmp(*((char **)a), *((char **)b));
@@ -135,6 +125,7 @@ void leave(){
 }
 
 void help() {
+	system("clear");
 	printf("\n\t COMMANDS \t\n\n");
 	printf("Total number of commands = %d\n\n", commands_list->total);
 	if(commands_list->total > 0)
@@ -152,11 +143,11 @@ int main() {
 	commands_list = malloc(sizeof *commands_list);
 	commands_list_init(commands_list);
 	
-	command_insert(commands_list, 'h', "\tList existing commands", help);
-	command_insert(commands_list, 'u', "\tList users (alphabetically ordered by name)", print_ordered_users);
-	command_insert(commands_list, 'c', "\tList carts (ordered by price)", print_ordered_prices);
-	command_insert(commands_list, 'n', "\tEmbed new command", command_new);
-	command_insert(commands_list, 's', "\tExit program", leave);
+	command_insert('h', "\tList existing commands", help);
+	command_insert('u', "\tList users (alphabetically ordered by name)", print_ordered_users);
+	command_insert('c', "\tList carts (ordered by price)", print_ordered_prices);
+	command_insert('n', "\tAdd new command (plug-in)", command_new);
+	command_insert('s', "\tExit program", leave);
 
 	printf("\n\t\tWelcome to the GET JSON Application!\t\t\n\n");
 	printf("\tHere you can check the carts, users and products information.\n");
@@ -168,7 +159,7 @@ int main() {
 		char *command = strtok(line, " \n");
 		char *name = strtok(NULL, " \n");
 		if (command != NULL)
-			command_execute(commands_list, *command, name);
+			command_execute(*command, name);
 	}
 }
 

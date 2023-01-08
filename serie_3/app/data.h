@@ -42,4 +42,6 @@ void data_list_delete(Datalist *data_list);
 
 void print_data_users(void *data);
 
+float cart_costs(void *prods, size_t n_products);
+
 #endif

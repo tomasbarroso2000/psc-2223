@@ -14,22 +14,22 @@ typedef struct {
 	int total;
 } Commands;
 
-void commands_list_init(Commands *commands_list);
+void commands_list_init();
 
 void print_command(void *command);
 
 int cmp_letter_command(void *item, void *letter);
 
-void command_insert(Commands *commands_list, char letter, char *description, void *command);
+void command_insert(char letter, char *description, void *command) ;
 
 void command_delete(void *command);
 
-void command_remove(Commands *commands_list, char letter);
+void command_remove(char letter);
 
-void commands_list_delete(Commands *commands_list);
+void commands_list_delete();
 
-void command_execute(Commands *commands_list, char letter, char *param);
+void command_execute(char letter, char *param);
 
-void command_new(Commands *commands_list, char *lib);
+void command_new(char *lib);
 
 #endif

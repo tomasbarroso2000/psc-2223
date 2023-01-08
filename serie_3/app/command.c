@@ -1,13 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "command.h"
 #include <dlfcn.h>
 #include <errno.h>
+#include <ctype.h>
+#include "command.h"
 
+extern Commands *commands_list;
 
-
-void commands_list_init(Commands *commands_list) {
+void commands_list_init() {
 	commands_list->commands = list_create();
 	commands_list->total = 0;
 }
@@ -24,7 +25,7 @@ int cmp_letter_command(void *item, void *letter) {
 	return ((Command *)data)->letter == *((char *) letter);
 }
 
-void command_insert(Commands *commands_list, char letter, char *description, void *command) {
+void command_insert(char letter, char *description, void *command) {
 	if(list_find(commands_list->commands, cmp_letter_command, &letter) != NULL) {
 		fprintf(stderr, "Command with letter [%c] already exists!\n", letter);
 	}
@@ -44,7 +45,7 @@ void command_delete(void *command) {
 	free(command);
 }
 
-void command_remove(Commands *commands_list, char letter) {
+void command_remove(char letter) {
 	Node *command = list_find(commands_list->commands, cmp_letter_command, &letter);
 	if(command != NULL) {
 		list_remove(command);
@@ -55,14 +56,15 @@ void command_remove(Commands *commands_list, char letter) {
 		fprintf(stderr, "Command with letter [%c] does not exist\n", letter);
 }
 
-void commands_list_delete(Commands *commands_list) {
+void commands_list_delete() {
 	list_destroy(commands_list->commands, command_delete);
 	free(commands_list);
 }
 
 
-void command_execute(Commands *commands_list, char letter, char *param) {
-	Node *command_node = list_find(commands_list->commands, cmp_letter_command, &letter);
+void command_execute(char letter, char *param) {
+	char l = tolower(letter);
+	Node *command_node = list_find(commands_list->commands, cmp_letter_command, &l);
 	
 	if (command_node == NULL) {
 		printf("Invalid command.\nPlease type 'h' to see the available commands.\n\n");
@@ -72,14 +74,18 @@ void command_execute(Commands *commands_list, char letter, char *param) {
 	Command *cmd = (Command *) (command_node->data);
 	
 	void (*func) (void *) =  cmd->func;
-	
 	func(param);
 	
 	return;
 		
 }
 
-void command_new(Commands *commands_list, char *lib) {
+void command_new(char *lib) {
+	if(lib == NULL) {
+		printf("to add a new command you need the following format <n lib___.so>\n");
+		return;
+	}
+	
 	void *handle = dlopen(lib, RTLD_LAZY);
 	
 	if (handle == NULL) {
@@ -102,7 +108,9 @@ void command_new(Commands *commands_list, char *lib) {
 		fprintf(stderr, "%s\n", dlerror());
 		return;
 	}
-	command_insert(commands_list, *letter, *description, *func);
+	command_insert(*letter, *description, func);
+	printf("New command added!\n");
+	return;
 }
 
 

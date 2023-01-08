@@ -74,7 +74,7 @@ void users_list_delete(Users *users_list) {
 Users *users_get() {
 	Users *users_list = malloc(sizeof *users_list);
 	users_list_init(users_list);
-	json_t *res = http_get_json_data("https://dummyjson.com/users");
+	json_t *res = http_get_json_data("https://dummyjson.com/users?limit=100");
 	json_t *json_array = json_object_get(res, "users");
 	
 	for(int j = 0; j < json_array_size(json_array); j++) {
